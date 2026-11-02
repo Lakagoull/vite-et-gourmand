@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Vite &amp; Gourmand — Charte graphique et maquettes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bordeaux:#7A1F3D; --bordeaux-fonce:#5C1529; --or:#C9973F; --or-texte:#8A6420;
+  --creme:#FBF6EE; --encre:#2A211C; --gris:#6B5E57; --sauge:#4F6F4A; --alerte:#B42318; --blanc:#FFFFFF;
+  --titre:'Playfair Display', Georgia, serif; --texte:'Lato', Arial, sans-serif;
+}
+@page{ size:A4 portrait; margin:0; }
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+body{ font-family:var(--texte); color:var(--encre); -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+
+/* ---------- Pages du document ---------- */
+.page{ width:210mm; height:297mm; padding:12mm 12mm 10mm; page-break-after:always; overflow:hidden; position:relative; background:#fff; }
+.page:last-child{ page-break-after:auto; }
+.page h1.doc{ font-family:var(--titre); color:var(--bordeaux); font-size:22pt; margin:0 0 2mm; }
+.page h2.doc{ font-family:var(--titre); color:var(--bordeaux); font-size:16pt; margin:0 0 1mm; }
+.page .sous{ color:var(--gris); font-size:10pt; margin:0 0 5mm; }
+.page .num{ position:absolute; bottom:6mm; right:12mm; font-size:8pt; color:var(--gris); }
+.page p, .page li{ font-size:10.5pt; line-height:1.5; }
+
+.couverture{ background:var(--bordeaux); color:#fff; display:flex; flex-direction:column; justify-content:center; padding:25mm; }
+.couverture .logo{ font-family:var(--titre); font-size:46pt; line-height:1.1; }
+.couverture .logo span{ color:var(--or); }
+.couverture h1{ font-family:var(--texte); font-weight:400; font-size:20pt; margin:8mm 0 2mm; }
+.couverture p{ font-size:12pt; opacity:.9; margin:0; }
+.couverture .bas{ position:absolute; bottom:20mm; left:25mm; font-size:10pt; opacity:.85; }
+
+.palette{ display:grid; grid-template-columns:repeat(3,1fr); gap:5mm; margin-bottom:6mm; }
+.couleur{ border:1px solid #e3dcd2; border-radius:3mm; overflow:hidden; font-size:9pt; }
+.couleur .pastille{ height:24mm; display:flex; align-items:flex-end; padding:2mm 3mm; font-weight:700; }
+.couleur .infos{ padding:2.5mm 3mm; line-height:1.45; }
+.couleur .infos b{ font-size:10pt; }
+table.contrastes{ width:100%; border-collapse:collapse; font-size:9pt; }
+table.contrastes th, table.contrastes td{ border:1px solid #e3dcd2; padding:1.6mm 2.5mm; text-align:left; }
+table.contrastes th{ background:var(--creme); }
+.ok{ color:var(--sauge); font-weight:700; } .ko{ color:var(--alerte); font-weight:700; }
+
+.typo-bloc{ border:1px solid #e3dcd2; border-radius:3mm; padding:5mm 6mm; margin-bottom:5mm; }
+.typo-bloc .etiquette{ font-size:8.5pt; text-transform:uppercase; letter-spacing:.08em; color:var(--gris); margin-bottom:2mm; }
+.alphabet{ font-size:13pt; line-height:1.5; word-break:break-all; }
+
+/* ---------- Cadres d'appareils ---------- */
+.ecran{ border:1px solid #cfc6bb; border-radius:8px; overflow:hidden; background:#fff; box-shadow:0 2px 10px rgba(0,0,0,.08); }
+.barre-nav{ height:30px; background:#ece7e1; display:flex; align-items:center; gap:6px; padding:0 12px; }
+.barre-nav i{ width:10px; height:10px; border-radius:50%; background:#cbbfb3; display:block; }
+.barre-nav .url{ margin-left:14px; background:#fff; border-radius:4px; height:18px; flex:1; max-width:420px; font-size:11px; color:#777; display:flex; align-items:center; padding:0 8px; font-family:Arial, sans-serif; }
+.desktop{ width:1280px; zoom:.55; }
+.desktop .vue{ max-height:1700px; overflow:hidden; }
+.desktop.long{ zoom:.41; margin:0 auto; }
+.desktop.long .vue{ max-height:2330px; }
+.mobiles{ display:flex; gap:40px; zoom:.58; }
+.mobile{ width:375px; border:10px solid #2A211C; border-radius:36px; overflow:hidden; background:#fff; }
+.mobile .vue{ height:1640px; overflow:hidden; }
+.legende-ecrans{ display:flex; gap:0; font-size:9pt; color:var(--gris); margin-top:2mm; }
+.legende-ecrans span{ flex:1; text-align:center; }
+
+/* =========================================================
+   STYLE DU SITE (maquettes haute fidélité)
+   ========================================================= */
+.site{ font-family:var(--texte); color:var(--encre); background:var(--creme); font-size:16px; line-height:1.55; }
+.site h1,.site h2,.site h3{ font-family:var(--titre); color:var(--bordeaux); margin:0 0 12px; line-height:1.2; }
+.site h1{ font-size:48px; } .site h2{ font-size:34px; } .site h3{ font-size:22px; }
+.site p{ margin:0 0 12px; }
+.conteneur{ padding:0 72px; }
+.mobile .conteneur{ padding:0 20px; }
+
+header.entete{ background:var(--blanc); border-bottom:1px solid #eadfd2; height:84px; display:flex; align-items:center; justify-content:space-between; padding:0 72px; }
+.logo-site{ font-family:var(--titre); font-size:28px; font-weight:700; color:var(--bordeaux); }
+.logo-site span{ color:var(--or-texte); }
+nav.menu-principal{ display:flex; gap:34px; align-items:center; font-weight:700; }
+nav.menu-principal a{ color:var(--encre); text-decoration:none; }
+nav.menu-principal a.btn-primaire{ color:#fff; }
+nav.menu-principal a.actif{ color:var(--bordeaux); border-bottom:3px solid var(--or); padding-bottom:4px; }
+.burger{ width:44px; height:44px; border:2px solid var(--bordeaux); border-radius:8px; display:flex; flex-direction:column; justify-content:center; gap:5px; padding:0 9px; }
+.burger i{ height:3px; background:var(--bordeaux); display:block; border-radius:2px; }
+.mobile header.entete{ height:68px; padding:0 20px; }
+.mobile .logo-site{ font-size:22px; }
+
+.btn{ display:inline-block; font-weight:700; border-radius:8px; padding:13px 26px; text-decoration:none; font-size:16px; border:2px solid transparent; }
+.btn-primaire{ background:var(--bordeaux); color:#fff; }
+.btn-secondaire{ background:transparent; color:var(--bordeaux); border-color:var(--bordeaux); }
+.btn-or{ background:var(--or); color:var(--encre); }
+.btn-bloc{ display:block; text-align:center; }
+
+.img{ border-radius:12px; display:flex; align-items:flex-end; padding:14px 16px; color:#fff; font-weight:700; font-size:14px; text-shadow:0 1px 3px rgba(0,0,0,.4); position:relative; overflow:hidden; }
+.img::after{ content:""; position:absolute; inset:0; background:radial-gradient(circle at 70% 30%, rgba(255,255,255,.18), transparent 55%); }
+.img.noel{ background:linear-gradient(135deg,#5C1529,#7A1F3D 50%,#C9973F); }
+.img.paques{ background:linear-gradient(135deg,#4F6F4A,#9DB37A 60%,#E9D8A6); }
+.img.classique{ background:linear-gradient(135deg,#3B2A22,#7A4B32 55%,#C9973F); }
+.img.vege{ background:linear-gradient(135deg,#2F5A3A,#4F6F4A 50%,#B9C98A); }
+.img.vegan{ background:linear-gradient(135deg,#46704C,#8FB06E 55%,#F0D98C); }
+.img.event{ background:linear-gradient(135deg,#2A211C,#5C1529 55%,#C9973F); }
+.img.equipe{ background:linear-gradient(135deg,#7A4B32,#B9835A 55%,#F1D7B5); }
+
+.hero{ background:var(--bordeaux); color:#fff; padding:80px 72px; display:grid; grid-template-columns:1.1fr 1fr; gap:56px; align-items:center; }
+.hero h1{ color:#fff; }
+.hero p{ font-size:19px; opacity:.95; }
+.hero .surtitre{ color:var(--or); font-weight:700; letter-spacing:.12em; text-transform:uppercase; font-size:14px; margin-bottom:12px; }
+.mobile .hero{ grid-template-columns:1fr; padding:40px 20px; gap:24px; }
+.mobile .hero h1{ font-size:34px; }
+.mobile .hero p{ font-size:17px; }
+
+section.bloc{ padding-top:72px; padding-bottom:72px; }
+.mobile section.bloc{ padding-top:44px; padding-bottom:44px; }
+.deux-col{ display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center; }
+.mobile .deux-col{ grid-template-columns:1fr; gap:24px; }
+.trois-col{ display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
+.mobile .trois-col{ grid-template-columns:1fr; gap:18px; }
+.carte{ background:#fff; border:1px solid #eadfd2; border-radius:14px; padding:26px; }
+.icone{ width:56px; height:56px; border-radius:50%; background:var(--creme); border:2px solid var(--or); display:flex; align-items:center; justify-content:center; font-size:26px; margin-bottom:14px; color:var(--bordeaux); font-family:var(--titre); font-weight:700; }
+.etoiles{ color:var(--or-texte); font-size:20px; letter-spacing:2px; margin-bottom:8px; }
+.auteur{ color:var(--gris); font-size:14px; font-weight:700; margin-top:10px; }
+.titre-centre{ text-align:center; margin-bottom:36px; }
+.titre-centre p{ color:var(--gris); }
+
+footer.pied{ background:var(--encre); color:#F3ECE2; padding:52px 72px 28px; }
+footer.pied h4{ font-family:var(--titre); color:var(--or); font-size:20px; margin:0 0 14px; }
+footer.pied .cols{ display:grid; grid-template-columns:1.2fr 1fr 1fr; gap:40px; }
+footer.pied table{ border-collapse:collapse; font-size:15px; }
+footer.pied td{ padding:2px 18px 2px 0; }
+footer.pied a{ color:#F3ECE2; display:block; margin-bottom:6px; }
+footer.pied .copy{ border-top:1px solid #4a3d35; margin-top:30px; padding-top:16px; font-size:13px; opacity:.8; }
+.mobile footer.pied{ padding:36px 20px 20px; }
+.mobile footer.pied .cols{ grid-template-columns:1fr; gap:24px; }
+
+/* Vue globale des menus */
+.fil{ font-size:14px; color:var(--gris); padding:22px 0 0; }
+.page-menus{ display:grid; grid-template-columns:290px 1fr; gap:36px; padding:22px 0 64px; }
+.filtres{ background:#fff; border:1px solid #eadfd2; border-radius:14px; padding:24px; align-self:start; }
+.filtres h3{ font-size:22px; }
+.champ{ margin-bottom:18px; }
+.champ label{ display:block; font-weight:700; font-size:14px; margin-bottom:6px; }
+.saisie{ background:#fff; border:2px solid #CDBFB1; border-radius:8px; height:44px; padding:0 12px; display:flex; align-items:center; justify-content:space-between; color:var(--gris); font-size:15px; }
+.duo{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.grille-menus{ display:grid; grid-template-columns:repeat(3,1fr); gap:26px; }
+.resultats{ display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; color:var(--gris); }
+.carte-menu{ background:#fff; border:1px solid #eadfd2; border-radius:14px; overflow:hidden; display:flex; flex-direction:column; }
+.carte-menu .img{ height:170px; border-radius:0; }
+.carte-menu .corps{ padding:18px 20px 20px; display:flex; flex-direction:column; flex:1; }
+.carte-menu h3{ font-size:21px; margin-bottom:8px; }
+.carte-menu p{ font-size:15px; color:var(--gris); }
+.badges{ display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
+.badge{ font-size:12px; font-weight:700; padding:4px 10px; border-radius:20px; background:var(--creme); color:var(--bordeaux); border:1px solid #E3D3C0; }
+.badge.regime{ color:var(--sauge); border-color:#C9D6C3; background:#F1F5EE; }
+.infos-menu{ display:flex; justify-content:space-between; align-items:flex-end; border-top:1px solid #f0e7dc; padding-top:12px; margin:auto 0 14px; }
+.infos-menu .prix{ font-family:var(--titre); font-size:26px; color:var(--bordeaux); font-weight:700; }
+.infos-menu small{ display:block; color:var(--gris); font-size:13px; }
+.mobile .page-menus{ grid-template-columns:1fr; gap:18px; padding:16px 0 40px; }
+.mobile .grille-menus{ grid-template-columns:1fr; gap:18px; }
+.btn-filtres{ display:flex; justify-content:space-between; align-items:center; background:#fff; border:2px solid var(--bordeaux); color:var(--bordeaux); border-radius:10px; padding:12px 16px; font-weight:700; }
+
+/* Vue détaillée */
+.detail{ display:grid; grid-template-columns:1.05fr 1fr; gap:52px; padding:22px 0 40px; }
+.galerie .grande{ height:420px; }
+.galerie .vignettes{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:12px; }
+.galerie .vignettes .img{ height:96px; font-size:12px; }
+.galerie .vignettes .img.selection{ outline:3px solid var(--or); outline-offset:2px; }
+.boite-prix{ background:#fff; border:1px solid #eadfd2; border-radius:14px; padding:22px; margin:18px 0; display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.boite-prix .valeur{ font-family:var(--titre); font-size:28px; color:var(--bordeaux); font-weight:700; }
+.boite-prix .lib{ font-size:13px; color:var(--gris); font-weight:700; text-transform:uppercase; letter-spacing:.05em; }
+.stock{ grid-column:1 / -1; background:#F1F5EE; color:var(--sauge); font-weight:700; border-radius:8px; padding:10px 14px; font-size:15px; }
+.conditions{ border:3px solid var(--alerte); background:#FDF1EF; border-radius:12px; padding:18px 20px; margin-bottom:18px; }
+.conditions .titre-alerte{ color:var(--alerte); font-weight:700; font-size:18px; margin-bottom:6px; display:flex; gap:10px; align-items:center; }
+.conditions .titre-alerte b{ width:28px; height:28px; border-radius:50%; background:var(--alerte); color:#fff; display:inline-flex; align-items:center; justify-content:center; font-size:17px; }
+.conditions p{ margin:0; font-size:15px; }
+.compo{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; padding-bottom:60px; }
+.compo .carte h3{ font-size:20px; border-bottom:2px solid var(--or); padding-bottom:8px; }
+.plat{ padding:10px 0; border-bottom:1px dashed #eadfd2; }
+.plat:last-child{ border-bottom:0; }
+.plat strong{ display:block; margin-bottom:6px; }
+.allergene{ display:inline-block; font-size:12px; padding:2px 8px; border-radius:4px; background:#FFF6E5; color:#6E4E14; border:1px solid #EBD6A8; margin:0 4px 4px 0; font-weight:700; }
+.mobile .detail{ grid-template-columns:1fr; gap:20px; padding:14px 0 24px; }
+.mobile .galerie .grande{ height:230px; }
+.mobile .galerie .vignettes .img{ height:64px; }
+.mobile .compo{ grid-template-columns:1fr; gap:16px; padding-bottom:36px; }
+.mobile .site h1{ font-size:30px; }
+.mobile .site h2{ font-size:26px; }
+
+/* =========================================================
+   WIREFRAMES : même structure, rendu basse fidélité
+   ========================================================= */
+.wf .site, .wf .site *{ font-family:Arial, Helvetica, sans-serif !important; color:#4a4a4a !important; background:none !important; box-shadow:none !important; text-shadow:none !important; border-color:#9a9a9a !important; outline-color:#777 !important; }
+.wf .site{ background:#fff !important; }
+.wf .site h1, .wf .site h2, .wf .site h3, .wf .logo-site, .wf .prix, .wf .valeur{ color:#222 !important; font-weight:700 !important; }
+.wf .img{ background:#e9e9e9 !important; border:1px solid #9a9a9a !important; justify-content:center; align-items:center; color:#777 !important; font-weight:400 !important; }
+.wf .img::after{ background:linear-gradient(to top right, transparent calc(50% - 1px), #b5b5b5 50%, transparent calc(50% + 1px)), linear-gradient(to top left, transparent calc(50% - 1px), #b5b5b5 50%, transparent calc(50% + 1px)) !important; }
+.wf .btn, .wf .btn-filtres{ background:#d4d4d4 !important; border:1px solid #888 !important; color:#222 !important; }
+.wf .btn-secondaire{ background:#fff !important; }
+.wf header.entete, .wf footer.pied, .wf .hero{ background:#f1f1f1 !important; border-bottom:1px solid #bbb !important; }
+.wf .carte, .wf .carte-menu, .wf .filtres, .wf .boite-prix{ border:1px dashed #999 !important; }
+.wf .conditions{ border:3px solid #444 !important; background:#f7f7f7 !important; }
+.wf .conditions .titre-alerte b{ background:#444 !important; color:#fff !important; }
+.wf .badge, .wf .allergene, .wf .stock{ border:1px solid #aaa !important; background:#f3f3f3 !important; }
+.wf .burger i{ background:#555 !important; }
+.wf nav.menu-principal a.actif{ border-bottom-color:#555 !important; }
+.wf .icone{ border-color:#999 !important; }
+.wf .mobile{ border-color:#555; }
+</style>
+</head>
+<body>
+
+<!-- =================== MODÈLES DES ÉCRANS (réutilisés pour wireframes et maquettes) =================== -->
+
+<template id="entete-desktop">
+  <header class="entete">
+    <div class="logo-site">Vite <span>&amp;</span> Gourmand</div>
+    <nav class="menu-principal">
+      <a href="#" data-page="accueil">Accueil</a>
+      <a href="#" data-page="menus">Nos menus</a>
+      <a href="#" data-page="contact">Contact</a>
+      <a href="#" class="btn btn-primaire" style="padding:10px 22px">Connexion</a>
+    </nav>
+  </header>
+</template>
+
+<template id="entete-mobile">
+  <header class="entete">
+    <div class="logo-site">Vite <span>&amp;</span> Gourmand</div>
+    <div class="burger" aria-label="Ouvrir le menu"><i></i><i></i><i></i></div>
+  </header>
+</template>
+
+<template id="pied">
+  <footer class="pied">
+    <div class="cols">
+      <div>
+        <h4>Nos horaires</h4>
+        <table>
+          <tr><td>Lundi</td><td>09h00 – 18h00</td></tr>
+          <tr><td>Mardi</td><td>09h00 – 18h00</td></tr>
+          <tr><td>Mercredi</td><td>09h00 – 18h00</td></tr>
+          <tr><td>Jeudi</td><td>09h00 – 18h00</td></tr>
+          <tr><td>Vendredi</td><td>09h00 – 20h00</td></tr>
+          <tr><td>Samedi</td><td>10h00 – 20h00</td></tr>
+          <tr><td>Dimanche</td><td>Fermé</td></tr>
+        </table>
+      </div>
+      <div>
+        <h4>Vite &amp; Gourmand</h4>
+        <p>12 rue Sainte-Catherine<br>33000 Bordeaux<br>05 56 00 00 00</p>
+      </div>
+      <div>
+        <h4>Informations</h4>
+        <a href="#">Mentions légales</a>
+        <a href="#">Conditions générales de vente</a>
+        <a href="#">Politique de confidentialité</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+    <div class="copy">© 2026 Vite &amp; Gourmand — Traiteur à Bordeaux</div>
+  </footer>
+</template>
+
+<template id="vue-accueil">
+  <div class="site">
+    <slot-entete></slot-entete>
+    <section class="hero">
+      <div>
+        <div class="surtitre">Traiteur à Bordeaux depuis 25 ans</div>
+        <h1>Des menus de fête et du quotidien, livrés chez vous</h1>
+        <p>Julie et José cuisinent pour vos repas de Noël, de Pâques et tous vos évènements, avec des produits frais du Sud-Ouest.</p>
+        <a href="#" class="btn btn-or">Découvrir nos menus</a>
+      </div>
+      <div class="img noel" style="height:380px">Photo — table de fête dressée</div>
+    </section>
+    <section class="bloc conteneur">
+      <div class="deux-col">
+        <div class="img equipe" style="height:340px">Photo — Julie et José en cuisine</div>
+        <div>
+          <h2>Qui sommes-nous ?</h2>
+          <p>Depuis 25 ans, Vite &amp; Gourmand accompagne les Bordelais pour leurs repas en famille et leurs évènements. Nos menus évoluent au fil des saisons et des fêtes.</p>
+          <p>Commandez en ligne, choisissez votre date : nous préparons et livrons votre repas.</p>
+          <a href="#" class="btn btn-secondaire">Voir tous les menus</a>
+        </div>
+      </div>
+    </section>
+    <section class="bloc conteneur" style="padding-top:0">
+      <div class="titre-centre"><h2>Une équipe de professionnels</h2><p>Ce qui fait notre différence</p></div>
+      <div class="trois-col">
+        <div class="carte"><div class="icone">25</div><h3>25 ans d'expérience</h3><p>Un savoir-faire reconnu à Bordeaux pour tous vos repas, du plus simple au plus festif.</p></div>
+        <div class="carte"><div class="icone">✓</div><h3>Produits frais et locaux</h3><p>Nous travaillons avec des producteurs du Sud-Ouest et cuisinons tout sur place.</p></div>
+        <div class="carte"><div class="icone">➜</div><h3>Livraison à l'heure</h3><p>Livraison à Bordeaux et dans les environs, à l'heure que vous choisissez.</p></div>
+      </div>
+    </section>
+    <section class="bloc conteneur" style="padding-top:0">
+      <div class="titre-centre"><h2>Ils nous ont fait confiance</h2><p>Avis vérifiés de nos clients</p></div>
+      <div class="trois-col">
+        <div class="carte"><div class="etoiles" aria-label="5 sur 5">★★★★★</div><p>« Entrecôte parfaite et cannelés délicieux, livraison à l'heure. Je recommande ! »</p><div class="auteur">Sophie B. — Menu Classique Bordelais</div></div>
+        <div class="carte"><div class="etoiles" aria-label="5 sur 5">★★★★★</div><p>« Un réveillon sans stress, tout était prêt et très bon. Merci Julie et José ! »</p><div class="auteur">Marc L. — Menu de Noël Tradition</div></div>
+        <div class="carte"><div class="etoiles" aria-label="4 sur 5">★★★★☆</div><p>« Très bel buffet pour notre mariage, les invités ont adoré le dessert. »</p><div class="auteur">Inès et Paul — Menu Réception</div></div>
+      </div>
+    </section>
+    <slot-pied></slot-pied>
+  </div>
+</template>
+
+<template id="vue-menus">
+  <div class="site">
+    <slot-entete></slot-entete>
+    <div class="conteneur">
+      <div class="fil">Accueil › Nos menus</div>
+      <h1 style="margin-top:10px">Nos menus</h1>
+      <div class="page-menus">
+        <slot-filtres></slot-filtres>
+        <div>
+          <div class="resultats"><span><b>6 menus</b> correspondent à votre recherche</span><span class="desktop-only">Mise à jour automatique</span></div>
+          <div class="grille-menus">
+            <div class="carte-menu"><div class="img noel">Photo — Menu de Noël</div><div class="corps"><div class="badges"><span class="badge">Noël</span><span class="badge regime">Classique</span></div><h3>Menu de Noël Tradition</h3><p>Foie gras, volaille fermière et bûche traditionnelle.</p><div class="infos-menu"><div><small>Minimum</small><b>6 personnes</b></div><div class="prix">252,00 €</div></div><a href="#" class="btn btn-primaire btn-bloc">Voir le détail</a></div></div>
+            <div class="carte-menu"><div class="img paques">Photo — Menu de Pâques</div><div class="corps"><div class="badges"><span class="badge">Pâques</span><span class="badge regime">Classique</span></div><h3>Menu de Pâques Printanier</h3><p>Agneau de lait, légumes primeurs, dessert chocolaté.</p><div class="infos-menu"><div><small>Minimum</small><b>4 personnes</b></div><div class="prix">144,00 €</div></div><a href="#" class="btn btn-primaire btn-bloc">Voir le détail</a></div></div>
+            <div class="carte-menu"><div class="img classique">Photo — Menu Bordelais</div><div class="corps"><div class="badges"><span class="badge">Classique</span><span class="badge regime">Classique</span></div><h3>Menu Classique Bordelais</h3><p>Entrecôte à la bordelaise, gratin et cannelés maison.</p><div class="infos-menu"><div><small>Minimum</small><b>2 personnes</b></div><div class="prix">58,00 €</div></div><a href="#" class="btn btn-primaire btn-bloc">Voir le détail</a></div></div>
+            <div class="carte-menu"><div class="img vege">Photo — Menu Végétarien</div><div class="corps"><div class="badges"><span class="badge">Classique</span><span class="badge regime">Végétarien</span></div><h3>Menu Végétarien du Marché</h3><p>Une cuisine de saison, colorée, sans viande ni poisson.</p><div class="infos-menu"><div><small>Minimum</small><b>4 personnes</b></div><div class="prix">108,00 €</div></div><a href="#" class="btn btn-primaire btn-bloc">Voir le détail</a></div></div>
+            <div class="carte-menu"><div class="img vegan">Photo — Menu Vegan</div><div class="corps"><div class="badges"><span class="badge">Classique</span><span class="badge regime">Vegan</span></div><h3>Menu Vegan Fraîcheur</h3><p>100 % végétal, frais et gourmand.</p><div class="infos-menu"><div><small>Minimum</small><b>4 personnes</b></div><div class="prix">112,00 €</div></div><a href="#" class="btn btn-primaire btn-bloc">Voir le détail</a></div></div>
+            <div class="carte-menu"><div class="img event">Photo — Menu Réception</div><div class="corps"><div class="badges"><span class="badge">Évènement</span><span class="badge regime">Classique</span></div><h3>Menu Réception &amp; Évènement</h3><p>Pour mariages, anniversaires et séminaires.</p><div class="infos-menu"><div><small>Minimum</small><b>20 personnes</b></div><div class="prix">960,00 €</div></div><a href="#" class="btn btn-primaire btn-bloc">Voir le détail</a></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <slot-pied></slot-pied>
+  </div>
+</template>
+
+<template id="filtres-desktop">
+  <aside class="filtres">
+    <h3>Filtrer</h3>
+    <div class="champ"><label>Prix maximum</label><div class="saisie">300 €</div></div>
+    <div class="champ"><label>Fourchette de prix</label><div class="duo"><div class="saisie">Min</div><div class="saisie">Max</div></div></div>
+    <div class="champ"><label>Thème</label><div class="saisie">Tous <span>▾</span></div></div>
+    <div class="champ"><label>Régime</label><div class="saisie">Tous <span>▾</span></div></div>
+    <div class="champ"><label>Nombre de personnes minimum</label><div class="saisie">Ex. : 6</div></div>
+    <a href="#" class="btn btn-secondaire btn-bloc">Réinitialiser</a>
+  </aside>
+</template>
+
+<template id="filtres-mobile">
+  <div class="btn-filtres"><span>Filtrer les menus (prix, thème, régime…)</span><span>▾</span></div>
+</template>
+
+<template id="vue-detail">
+  <div class="site">
+    <slot-entete></slot-entete>
+    <div class="conteneur">
+      <div class="fil">Accueil › Nos menus › Menu de Noël Tradition</div>
+      <div class="detail">
+        <div class="galerie">
+          <div class="img noel grande">Photo — table de Noël dressée</div>
+          <div class="vignettes">
+            <div class="img noel selection">Photo 1</div>
+            <div class="img classique">Photo 2</div>
+            <div class="img event">Photo 3</div>
+          </div>
+        </div>
+        <div>
+          <div class="badges"><span class="badge">Noël</span><span class="badge regime">Classique</span></div>
+          <h1>Menu de Noël Tradition</h1>
+          <p>Un repas de fête généreux autour du foie gras, de la volaille fermière et de la traditionnelle bûche.</p>
+          <div class="boite-prix">
+            <div><div class="lib">Minimum</div><div class="valeur">6 pers.</div></div>
+            <div><div class="lib">Prix (6 pers.)</div><div class="valeur">252,00 €</div></div>
+            <div class="stock">Plus que 8 commandes possibles pour ce menu</div>
+          </div>
+          <div class="conditions" role="alert">
+            <div class="titre-alerte"><b>!</b> Conditions de ce menu — à lire avant de commander</div>
+            <p>À commander au minimum <strong>14 jours avant</strong> la prestation. Plats livrés froids : à conserver au réfrigérateur (0 à 4 °C) et à consommer sous 48 h.</p>
+          </div>
+          <a href="#" class="btn btn-primaire btn-bloc">Commander ce menu</a>
+        </div>
+      </div>
+      <h2>Composition du menu</h2>
+      <div class="compo">
+        <div class="carte"><h3>Entrées</h3>
+          <div class="plat"><strong>Foie gras mi-cuit et chutney de figues</strong><span class="allergene">Gluten</span><span class="allergene">Sulfites</span></div>
+          <div class="plat"><strong>Huîtres du bassin d'Arcachon</strong><span class="allergene">Mollusques</span></div>
+        </div>
+        <div class="carte"><h3>Plats</h3>
+          <div class="plat"><strong>Chapon farci aux marrons</strong><span class="allergene">Gluten</span><span class="allergene">Œufs</span><span class="allergene">Fruits à coque</span></div>
+          <div class="plat"><strong>Gratin dauphinois</strong><span class="allergene">Lait</span></div>
+        </div>
+        <div class="carte"><h3>Desserts</h3>
+          <div class="plat"><strong>Bûche de Noël chocolat-praliné</strong><span class="allergene">Gluten</span><span class="allergene">Œufs</span><span class="allergene">Lait</span><span class="allergene">Fruits à coque</span></div>
+        </div>
+      </div>
+    </div>
+    <slot-pied></slot-pied>
+  </div>
+</template>
+
+<!-- =================== DOCUMENT =================== -->
+
+<div class="page couverture">
+  <div class="logo">Vite <span>&amp;</span><br>Gourmand</div>
+  <h1>Charte graphique &amp; maquettes</h1>
+  <p>Application web de commande de menus — traiteur à Bordeaux</p>
+  <div class="bas">ECF Développeur Web et Web Mobile — FastDev — Novembre 2026</div>
+</div>
+
+<div class="page">
+  <h1 class="doc">1. Intentions graphiques</h1>
+  <p class="sous">Les choix de départ et leur justification</p>
+  <p><b>Positionnement :</b> Vite &amp; Gourmand est un traiteur familial bordelais présent depuis 25 ans. L'identité visuelle doit évoquer à la fois la <b>gastronomie du Sud-Ouest</b> (couleur bordeaux, référence au vin et à la ville), la <b>chaleur</b> d'une entreprise familiale (fond crème, tons dorés) et le <b>professionnalisme</b> (mise en page sobre et aérée, typographie élégante).</p>
+  <p><b>Cibles :</b> particuliers de tous âges (repas de fêtes, familles), habitués qui recevaient les menus par mail, et organisateurs d'évènements. L'interface doit donc rester simple, lisible et rassurante, y compris pour des personnes peu à l'aise avec le numérique.</p>
+  <p><b>Accessibilité (RGAA) :</b></p>
+  <ul>
+    <li>Toutes les associations texte / fond respectent un contraste d'au moins <b>4,5:1</b> (critère 3.2 du RGAA), vérifiées par calcul (voir page suivante).</li>
+    <li>L'information n'est jamais donnée uniquement par la couleur : les conditions d'un menu sont signalées par un cadre, une icône « ! » et un titre explicite.</li>
+    <li>Taille de texte de base de 16 px, zones cliquables d'au moins 44 × 44 px sur mobile.</li>
+    <li>Le doré (#C9973F) n'est jamais utilisé pour du texte sur fond clair (contraste insuffisant) : il sert uniquement d'accent décoratif ou de fond pour un texte foncé.</li>
+  </ul>
+  <p><b>Démarche de conception :</b> les écrans ont d'abord été pensés en <b>wireframes</b> (basse fidélité, sans couleur) pour valider l'organisation des contenus et le parcours utilisateur, puis déclinés en <b>maquettes</b> (haute fidélité) avec la charte. Une approche <b>mobile first</b> a guidé l'adaptation : les grilles de 3 colonnes passent sur 1 colonne, la navigation devient un menu « burger », les filtres se replient derrière un bouton.</p>
+  <p><b>Écrans maquettés :</b> page d'accueil, vue globale des menus (avec filtres) et vue détaillée d'un menu, en version bureau (1280 px) et mobile (375 px).</p>
+  <div class="num">2</div>
+</div>
+
+<div class="page">
+  <h1 class="doc">2. Palette de couleurs</h1>
+  <p class="sous">Couleurs utilisées dans l'application</p>
+  <div class="palette">
+    <div class="couleur"><div class="pastille" style="background:#7A1F3D;color:#fff">Bordeaux</div><div class="infos"><b>#7A1F3D</b><br>RGB 122, 31, 61<br>Couleur principale : titres, boutons, en-tête</div></div>
+    <div class="couleur"><div class="pastille" style="background:#5C1529;color:#fff">Bordeaux foncé</div><div class="infos"><b>#5C1529</b><br>RGB 92, 21, 41<br>Survol et focus des boutons</div></div>
+    <div class="couleur"><div class="pastille" style="background:#C9973F;color:#2A211C">Or</div><div class="infos"><b>#C9973F</b><br>RGB 201, 151, 63<br>Accent décoratif, bouton sur fond bordeaux</div></div>
+    <div class="couleur"><div class="pastille" style="background:#FBF6EE;color:#2A211C">Crème</div><div class="infos"><b>#FBF6EE</b><br>RGB 251, 246, 238<br>Fond général des pages</div></div>
+    <div class="couleur"><div class="pastille" style="background:#2A211C;color:#fff">Encre</div><div class="infos"><b>#2A211C</b><br>RGB 42, 33, 28<br>Texte courant, pied de page</div></div>
+    <div class="couleur"><div class="pastille" style="background:#6B5E57;color:#fff">Gris taupe</div><div class="infos"><b>#6B5E57</b><br>RGB 107, 94, 87<br>Textes secondaires, légendes</div></div>
+    <div class="couleur"><div class="pastille" style="background:#4F6F4A;color:#fff">Vert sauge</div><div class="infos"><b>#4F6F4A</b><br>RGB 79, 111, 74<br>Régimes, stock, messages de succès</div></div>
+    <div class="couleur"><div class="pastille" style="background:#B42318;color:#fff">Rouge alerte</div><div class="infos"><b>#B42318</b><br>RGB 180, 35, 24<br>Conditions du menu, erreurs</div></div>
+    <div class="couleur"><div class="pastille" style="background:#8A6420;color:#fff">Or texte</div><div class="infos"><b>#8A6420</b><br>RGB 138, 100, 32<br>Version foncée de l'or, utilisable en texte</div></div>
+  </div>
+  <h2 class="doc">Vérification des contrastes (RGAA — critère 3.2)</h2>
+  <p class="sous">Seuil exigé : 4,5:1 pour le texte courant, 3:1 pour les grands textes</p>
+  <table class="contrastes">
+    <tr><th>Texte</th><th>Fond</th><th>Rapport</th><th>Résultat</th></tr>
+    <tr><td>Encre #2A211C</td><td>Crème #FBF6EE</td><td>14,65:1</td><td class="ok">Conforme</td></tr>
+    <tr><td>Bordeaux #7A1F3D</td><td>Crème #FBF6EE</td><td>9,34:1</td><td class="ok">Conforme</td></tr>
+    <tr><td>Blanc #FFFFFF</td><td>Bordeaux #7A1F3D</td><td>10,04:1</td><td class="ok">Conforme</td></tr>
+    <tr><td>Gris taupe #6B5E57</td><td>Crème #FBF6EE</td><td>5,80:1</td><td class="ok">Conforme</td></tr>
+    <tr><td>Vert sauge #4F6F4A</td><td>Crème #FBF6EE</td><td>5,27:1</td><td class="ok">Conforme</td></tr>
+    <tr><td>Rouge alerte #B42318</td><td>Crème #FBF6EE</td><td>6,11:1</td><td class="ok">Conforme</td></tr>
+    <tr><td>Or texte #8A6420</td><td>Crème #FBF6EE</td><td>4,97:1</td><td class="ok">Conforme</td></tr>
+    <tr><td>Encre #2A211C</td><td>Or #C9973F</td><td>5,99:1</td><td class="ok">Conforme</td></tr>
+    <tr><td>Or #C9973F</td><td>Crème #FBF6EE</td><td>2,45:1</td><td class="ko">Non conforme → jamais utilisé ainsi</td></tr>
+  </table>
+  <div class="num">3</div>
+</div>
+
+<div class="page">
+  <h1 class="doc">3. Typographie</h1>
+  <p class="sous">Deux polices Google Fonts, libres de droits (licence SIL Open Font License)</p>
+  <div class="typo-bloc">
+    <div class="etiquette">Titres — Playfair Display (600 / 700)</div>
+    <div style="font-family:var(--titre);font-size:30pt;color:var(--bordeaux);line-height:1.15">Des menus de fête livrés chez vous</div>
+    <div class="alphabet" style="font-family:var(--titre)">ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789 é è à ç € &amp;</div>
+    <p style="margin:3mm 0 0;font-size:9.5pt;color:var(--gris)">Police à empattements, élégante, qui rappelle les cartes de restaurant gastronomique. Réservée aux titres pour garder une bonne lisibilité.</p>
+  </div>
+  <div class="typo-bloc">
+    <div class="etiquette">Texte courant — Lato (400 / 700)</div>
+    <div style="font-family:var(--texte);font-size:13pt;line-height:1.6">Julie et José cuisinent pour vos repas de Noël, de Pâques et tous vos évènements, avec des produits frais du Sud-Ouest.</div>
+    <div class="alphabet" style="font-family:var(--texte)">ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789 é è à ç € &amp;</div>
+    <p style="margin:3mm 0 0;font-size:9.5pt;color:var(--gris)">Police sans empattements, très lisible à l'écran et sur mobile, adaptée aux formulaires et aux longs textes.</p>
+  </div>
+  <h2 class="doc">Échelle typographique</h2>
+  <table class="contrastes">
+    <tr><th>Élément</th><th>Police</th><th>Bureau</th><th>Mobile</th></tr>
+    <tr><td>Titre H1</td><td>Playfair Display 700</td><td>48 px</td><td>30–34 px</td></tr>
+    <tr><td>Titre H2</td><td>Playfair Display 700</td><td>34 px</td><td>26 px</td></tr>
+    <tr><td>Titre H3</td><td>Playfair Display 700</td><td>22 px</td><td>20 px</td></tr>
+    <tr><td>Texte courant</td><td>Lato 400</td><td>16 px</td><td>16 px</td></tr>
+    <tr><td>Boutons, libellés</td><td>Lato 700</td><td>16 px</td><td>16 px</td></tr>
+    <tr><td>Badges, allergènes</td><td>Lato 700</td><td>12 px</td><td>12 px</td></tr>
+  </table>
+  <h2 class="doc" style="margin-top:6mm">Composants</h2>
+  <div class="site" style="background:var(--creme);padding:6mm;border-radius:3mm;zoom:.8">
+    <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:16px">
+      <a class="btn btn-primaire">Bouton principal</a>
+      <a class="btn btn-secondaire">Bouton secondaire</a>
+      <a class="btn btn-or">Bouton sur fond foncé</a>
+      <span class="badge">Noël</span><span class="badge regime">Végétarien</span><span class="allergene">Gluten</span>
+    </div>
+    <div class="conditions" style="margin:0"><div class="titre-alerte"><b>!</b> Conditions de ce menu</div><p>Encadré utilisé pour mettre en évidence les conditions d'un menu.</p></div>
+  </div>
+  <div class="num">4</div>
+</div>
+
+<!-- Pages d'écrans générées par le script -->
+<div id="ecrans"></div>
+
+<script>
+const ecrans = [
+  { titre:'4. Wireframe bureau — Page d\'accueil', sous:'Présentation de l\'entreprise, professionnalisme de l\'équipe, avis clients validés, horaires en pied de page', vue:'vue-accueil', type:'desktop', wf:true, page:'accueil', url:'vite-gourmand.fr' },
+  { titre:'5. Wireframe bureau — Vue globale des menus', sous:'Filtres (prix maximum, fourchette de prix, thème, régime, nombre de personnes) mis à jour sans rechargement', vue:'vue-menus', type:'desktop', wf:true, page:'menus', url:'vite-gourmand.fr/menus' },
+  { titre:'6. Wireframe bureau — Vue détaillée d\'un menu', sous:'Galerie, informations complètes, conditions mises en évidence, composition et allergènes, bouton de commande', vue:'vue-detail', type:'desktop', wf:true, page:'menus', url:'vite-gourmand.fr/menu?id=1' },
+  { titre:'7. Wireframes mobile — Accueil, menus, détail', sous:'Largeur 375 px : navigation en menu burger, contenus sur une colonne, filtres repliables', type:'mobiles', wf:true },
+  { titre:'8. Maquette bureau — Page d\'accueil', sous:'Version haute fidélité avec la charte graphique', vue:'vue-accueil', type:'desktop', wf:false, page:'accueil', url:'vite-gourmand.fr' },
+  { titre:'9. Maquette bureau — Vue globale des menus', sous:'Version haute fidélité avec la charte graphique', vue:'vue-menus', type:'desktop', wf:false, page:'menus', url:'vite-gourmand.fr/menus' },
+  { titre:'10. Maquette bureau — Vue détaillée d\'un menu', sous:'Les conditions du menu sont encadrées en rouge, avec icône et titre, juste au-dessus du bouton de commande', vue:'vue-detail', type:'desktop', wf:false, page:'menus', url:'vite-gourmand.fr/menu?id=1' },
+  { titre:'11. Maquettes mobile — Accueil, menus, détail', sous:'Version haute fidélité avec la charte graphique', type:'mobiles', wf:false }
+];
+
+function construireVue(idVue, mobile, page){
+  const frag = document.getElementById(idVue).content.cloneNode(true);
+  const remplacer = (balise, idTpl) => frag.querySelectorAll(balise).forEach(el => el.replaceWith(document.getElementById(idTpl).content.cloneNode(true)));
+  remplacer('slot-entete', mobile ? 'entete-mobile' : 'entete-desktop');
+  remplacer('slot-pied', 'pied');
+  remplacer('slot-filtres', mobile ? 'filtres-mobile' : 'filtres-desktop');
+  if (mobile) frag.querySelectorAll('.desktop-only').forEach(el => el.remove());
+  if (page) frag.querySelectorAll('[data-page="'+page+'"]').forEach(a => a.classList.add('actif'));
+  const vue = document.createElement('div');
+  vue.className = 'vue';
+  vue.appendChild(frag);
+  return vue;
+}
+
+const conteneur = document.getElementById('ecrans');
+let numero = 5;
+ecrans.forEach(e => {
+  const page = document.createElement('div');
+  page.className = 'page' + (e.wf ? ' wf' : '');
+  page.innerHTML = '<h2 class="doc">'+e.titre+'</h2><p class="sous">'+e.sous+'</p>';
+  if (e.type === 'desktop') {
+    const ecran = document.createElement('div');
+    ecran.className = 'ecran desktop' + (e.vue === 'vue-accueil' ? ' long' : '');
+    ecran.innerHTML = '<div class="barre-nav"><i></i><i></i><i></i><div class="url">https://'+e.url+'</div></div>';
+    ecran.appendChild(construireVue(e.vue, false, e.page));
+    page.appendChild(ecran);
+  } else {
+    const ligne = document.createElement('div');
+    ligne.className = 'mobiles';
+    ['vue-accueil','vue-menus','vue-detail'].forEach(v => {
+      const m = document.createElement('div');
+      m.className = 'mobile';
+      m.appendChild(construireVue(v, true));
+      ligne.appendChild(m);
+    });
+    page.appendChild(ligne);
+    const leg = document.createElement('div');
+    leg.className = 'legende-ecrans';
+    leg.innerHTML = '<span>Accueil</span><span>Vue globale des menus</span><span>Vue détaillée</span>';
+    page.appendChild(leg);
+  }
+  page.insertAdjacentHTML('beforeend', '<div class="num">'+(numero++)+'</div>');
+  conteneur.appendChild(page);
+});
+</script>
+</body>
+</html>
