@@ -12,6 +12,7 @@ if (PHP_SAPI === 'cli-server' && is_file(__DIR__ . parse_url($_SERVER['REQUEST_U
 
 require dirname(__DIR__) . '/src/bootstrap.php';
 
+use App\Controllers\AdminController;
 use App\Controllers\AuthController;
 use App\Controllers\CommandeController;
 use App\Controllers\ContactController;
@@ -87,6 +88,10 @@ $router->post('/employe/avis', [GestionController::class, 'modererAvis']);
 
 // Espace administrateur
 $router->get('/admin', [GestionController::class, 'admin']);
+$router->get('/admin/employes', [AdminController::class, 'employes']);
+$router->post('/admin/employes', [AdminController::class, 'creerEmploye']);
+$router->post('/admin/employes/statut', [AdminController::class, 'basculerEmploye']);
+$router->get('/admin/statistiques', [AdminController::class, 'statistiques']);
 
 try {
     $router->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);

@@ -234,3 +234,29 @@ main:focus { outline: none; }
 .ligne-erreur th, .ligne-erreur td { background: #FDF1EF !important; }
 .nav-tabs .nav-link { color: var(--bordeaux); font-weight: 700; }
 .nav-tabs .nav-link.active { color: var(--encre); }
+
+/* ----- Graphiques (statistiques administrateur) ----- */
+.graphique { margin: 0; }
+.graphique-zone { position: relative; }
+.graphique-svg { display: block; overflow: visible; font-family: var(--police-texte); }
+.graphique-svg .grille { stroke: #EFE7DD; stroke-width: 1; }
+.graphique-svg .grille.axe { stroke: #B8A99A; }
+.graphique-svg .graduation { fill: var(--gris); font-size: 12px; }
+.graphique-svg .libelle-barre { fill: var(--encre); font-size: 14px; }
+.graphique-svg .valeur-barre { fill: var(--encre); font-size: 13px; font-weight: 700; }
+.graphique-svg .remplissage { fill: var(--bordeaux); }
+.graphique-svg .zone-survol { fill: transparent; }
+.graphique-svg .barre { cursor: default; outline: none; }
+.graphique-svg .barre:hover .remplissage, .graphique-svg .barre:focus .remplissage { fill: var(--bordeaux-fonce); }
+.graphique-svg .barre:focus-visible .zone-survol { stroke: var(--or); stroke-width: 3; }
+.infobulle { position: absolute; z-index: 5; background: var(--encre); color: #fff; font-size: .85rem; font-weight: 700; padding: .35rem .65rem; border-radius: 6px; pointer-events: none; white-space: nowrap; }
+details.carte summary { cursor: pointer; color: var(--bordeaux); }
+@media (forced-colors: active) {
+    .graphique-svg .remplissage { fill: CanvasText; }
+}
+.graphique-svg.version-large { max-width: 900px; }
+.graphique-svg.version-etroite { display: none; }
+@media (max-width: 575.98px) {
+    .graphique-svg.version-large { display: none; }
+    .graphique-svg.version-etroite { display: block; }
+}

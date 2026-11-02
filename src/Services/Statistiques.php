@@ -76,4 +76,46 @@ final class Statistiques
         $curseur->setTypeMap(['root' => 'array', 'document' => 'array', 'array' => 'array']);
         return $curseur->toArray();
     }
+
+    /**
+     * Nombre de commandes et chiffre d'affaires par menu (commandes annulées exclues).
+     * Filtres optionnels : menu_id, du (AAAA-MM-JJ), au (AAAA-MM-JJ, inclus).
+     */
+    public static function parMenu(array $filtres = []): array
+    {
+        $match = ['statut' => ['$ne' => 'annulee']];
+        if (!empty($filtres['menu_id'])) {
+            $match['menu_id'] = (int) $filtres['menu_id'];
+        }
+        $periode = [];
+        if (!empty($filtres['du'])) {
+            $periode['$gte'] = new UTCDateTime(strtotime($filtres['du'] . ' 00:00:00') * 1000);
+        }
+        if (!empty($filtres['au'])) {
+            $periode['$lt'] = new UTCDateTime(strtotime($filtres['au'] . ' 00:00:00 +1 day') * 1000);
+        }
+        if ($periode) {
+            $match['date_commande'] = $periode;
+        }
+
+        $resultats = self::agreger([
+            ['$match' => $match],
+            ['$group' => [
+                '_id'       => '$menu_id',
+                'titre'     => ['$last' => '$menu_titre'],
+                'commandes' => ['$sum' => 1],
+                'personnes' => ['$sum' => '$nombre_personne'],
+                'ca'        => ['$sum' => '$prix_total'],
+            ]],
+            ['$sort' => ['commandes' => -1, 'ca' => -1]],
+        ]);
+
+        return array_map(fn (array $r) => [
+            'menu_id'   => (int) $r['_id'],
+            'titre'     => (string) $r['titre'],
+            'commandes' => (int) $r['commandes'],
+            'personnes' => (int) $r['personnes'],
+            'ca'        => round((float) $r['ca'], 2),
+        ], $resultats);
+    }
 }
