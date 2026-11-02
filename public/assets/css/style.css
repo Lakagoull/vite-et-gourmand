@@ -175,3 +175,13 @@ main:focus { outline: none; }
 .liens-pied { list-style: none; padding: 0; }
 .liens-pied li { margin-bottom: .4rem; }
 .copyright { border-top: 1px solid #4A3D35; margin: 2rem 0 0; padding-top: 1rem; font-size: .85rem; color: #D9CFC4; }
+
+/* ----- Comptes ----- */
+.page-formulaire { max-width: 520px; }
+.regles-mdp { background: var(--creme); border-radius: 10px; padding: .9rem 1.1rem; font-size: .92rem; }
+.regles-mdp ul { list-style: none; padding: 0; }
+.regles-mdp li::before { content: "○"; display: inline-block; width: 1.4em; color: var(--gris); font-weight: 700; }
+.regles-mdp li.ok { color: var(--sauge); font-weight: 700; }
+.regles-mdp li.ok::before { content: "✓"; color: var(--sauge); }
+.form-check-input { width: 1.25em; height: 1.25em; border: 2px solid #A99887; }
+.form-check-input:checked { background-color: var(--bordeaux); border-color: var(--bordeaux); }

@@ -112,3 +112,23 @@ function old(string $champ, string $defaut = ''): string
 {
     return e($_SESSION['old'][$champ] ?? $defaut);
 }
+
+// ---------------------------------------------------------------------
+// Erreurs de formulaire accessibles (RGAA : erreur liée au champ)
+// ---------------------------------------------------------------------
+
+/** Classe et attributs ARIA d'un champ en erreur. */
+function attrErreur(array $erreurs, string $champ): string
+{
+    return isset($erreurs[$champ])
+        ? ' is-invalid" aria-invalid="true" aria-describedby="erreur-' . e($champ)
+        : '';
+}
+
+/** Message d'erreur affiché sous le champ. */
+function msgErreur(array $erreurs, string $champ): string
+{
+    return isset($erreurs[$champ])
+        ? '<div id="erreur-' . e($champ) . '" class="invalid-feedback d-block">' . e($erreurs[$champ]) . '</div>'
+        : '';
+}
