@@ -13,13 +13,21 @@ final class Horaire
     {
         try {
             return Database::get()
-                ->query('SELECT jour, heure_ouverture, heure_fermeture FROM horaire ORDER BY ordre')
+                ->query('SELECT horaire_id, jour, heure_ouverture, heure_fermeture FROM horaire ORDER BY ordre')
                 ->fetchAll();
         } catch (\Throwable $e) {
             // Le pied de page ne doit pas bloquer l'affichage si la base est indisponible
             error_log($e->getMessage());
             return [];
         }
+    }
+
+    /** Enregistre les horaires d'un jour (null = fermé). */
+    public static function enregistrer(int $id, ?string $ouverture, ?string $fermeture): void
+    {
+        Database::get()->prepare(
+            'UPDATE horaire SET heure_ouverture = :o, heure_fermeture = :f WHERE horaire_id = :id'
+        )->execute(['o' => $ouverture, 'f' => $fermeture, 'id' => $id]);
     }
 
     /** "09:00:00" -> "09h00" */

@@ -16,7 +16,9 @@ use App\Controllers\AuthController;
 use App\Controllers\CommandeController;
 use App\Controllers\ContactController;
 use App\Controllers\EspaceController;
+use App\Controllers\GestionCommandeController;
 use App\Controllers\GestionController;
+use App\Controllers\GestionMenuController;
 use App\Controllers\MenuController;
 use App\Controllers\PageController;
 use App\Router;
@@ -61,8 +63,29 @@ $router->post('/espace/avis', [EspaceController::class, 'avis']);
 $router->get('/espace/profil', [EspaceController::class, 'profilForm']);
 $router->post('/espace/profil', [EspaceController::class, 'profil']);
 
-// Espaces employé et administrateur
+// Espace employé (accessible aussi à l'administrateur)
 $router->get('/employe', [GestionController::class, 'employe']);
+$router->get('/employe/commandes', [GestionCommandeController::class, 'index']);
+$router->get('/employe/commande', [GestionCommandeController::class, 'detail']);
+$router->post('/employe/commande/statut', [GestionCommandeController::class, 'statut']);
+$router->post('/employe/commande/annuler', [GestionCommandeController::class, 'annuler']);
+$router->get('/employe/commande/modifier', [GestionCommandeController::class, 'modifierForm']);
+$router->post('/employe/commande/modifier', [GestionCommandeController::class, 'modifier']);
+$router->get('/employe/menus', [GestionMenuController::class, 'menus']);
+$router->get('/employe/menu', [GestionMenuController::class, 'menuForm']);
+$router->post('/employe/menu', [GestionMenuController::class, 'menuEnregistrer']);
+$router->post('/employe/menu/supprimer', [GestionMenuController::class, 'menuSupprimer']);
+$router->post('/employe/menu/image/supprimer', [GestionMenuController::class, 'imageSupprimer']);
+$router->get('/employe/plats', [GestionMenuController::class, 'plats']);
+$router->get('/employe/plat', [GestionMenuController::class, 'platForm']);
+$router->post('/employe/plat', [GestionMenuController::class, 'platEnregistrer']);
+$router->post('/employe/plat/supprimer', [GestionMenuController::class, 'platSupprimer']);
+$router->get('/employe/horaires', [GestionController::class, 'horairesForm']);
+$router->post('/employe/horaires', [GestionController::class, 'horaires']);
+$router->get('/employe/avis', [GestionController::class, 'avis']);
+$router->post('/employe/avis', [GestionController::class, 'modererAvis']);
+
+// Espace administrateur
 $router->get('/admin', [GestionController::class, 'admin']);
 
 try {
