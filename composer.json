@@ -1,0 +1,17 @@
+{
+    "name": "lakagoull/vite-et-gourmand",
+    "description": "Application web du traiteur Vite & Gourmand (ECF Développeur Web et Web Mobile)",
+    "type": "project",
+    "license": "proprietary",
+    "require": {
+        "php": ">=8.0",
+        "ext-pdo": "*",
+        "ext-mongodb": "*",
+        "phpmailer/phpmailer": "^6.9"
+    },
+    "autoload": {
+        "psr-4": { "App\\": "src/" },
+        "files": ["src/helpers.php"]
+    },
+    "config": { "optimize-autoloader": true }
+}

@@ -2,3 +2,5 @@
 .env
 *.log
 .vscode/
+/storage/mails/*
+!/storage/mails/.gitkeep
