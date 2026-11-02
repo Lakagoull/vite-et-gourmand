@@ -1,0 +1,55 @@
+/* Mise en page commune des documents PDF (A4) — charte Vite & Gourmand */
+@font-face { font-family: 'Lato'; font-weight: 400; src: url("../../public/assets/fonts/S6uyw4BMUTPHjx4wXg.woff2") format("woff2"); }
+@font-face { font-family: 'Lato'; font-weight: 700; src: url("../../public/assets/fonts/S6u9w4BMUTPHh6UVSwiPGQ.woff2") format("woff2"); }
+@font-face { font-family: 'Playfair Display'; font-weight: 600 700; src: url("../../public/assets/fonts/nuFiD-vYSZviVYUb_rj3ij__anPXDTzYgA.woff2") format("woff2"); }
+
+:root { --bordeaux:#7A1F3D; --or:#C9973F; --creme:#FBF6EE; --encre:#2A211C; --gris:#6B5E57; --sauge:#4F6F4A; --alerte:#B42318; }
+@page { size: A4; margin: 16mm 15mm 16mm 15mm; }
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { font-family: 'Lato', Arial, sans-serif; color: var(--encre); font-size: 10.5pt; line-height: 1.5; margin: 0; }
+
+.couverture { height: 265mm; background: var(--bordeaux); color: #fff; padding: 30mm 20mm; display: flex; flex-direction: column; justify-content: center; page-break-after: always; margin: -16mm -15mm 0; }
+.couverture .logo { font-family: 'Playfair Display', Georgia, serif; font-size: 40pt; line-height: 1.1; }
+.couverture .logo span { color: var(--or); }
+.couverture h1 { font-weight: 400; font-size: 22pt; margin: 10mm 0 3mm; color: #fff; font-family: 'Lato', Arial, sans-serif; }
+.couverture p { margin: 0 0 2mm; font-size: 11.5pt; opacity: .92; }
+.couverture .bas { margin-top: auto; font-size: 10pt; opacity: .85; }
+
+h1, h2, h3, h4 { font-family: 'Playfair Display', Georgia, serif; color: var(--bordeaux); line-height: 1.2; page-break-after: avoid; }
+h1 { font-size: 20pt; margin: 0 0 4mm; padding-bottom: 2mm; border-bottom: 2px solid var(--or); }
+h2 { font-size: 14.5pt; margin: 7mm 0 2.5mm; }
+h3 { font-size: 12pt; margin: 5mm 0 2mm; }
+h4 { font-size: 10.5pt; margin: 4mm 0 1.5mm; font-family: 'Lato', Arial, sans-serif; }
+.chapitre { page-break-before: always; }
+p { margin: 0 0 2.5mm; }
+ul, ol { margin: 0 0 3mm; padding-left: 6mm; }
+li { margin-bottom: 1mm; }
+a { color: var(--bordeaux); }
+code, .code { font-family: Consolas, 'Courier New', monospace; font-size: 9pt; background: #F3EEE7; padding: .2mm 1.2mm; border-radius: 1mm; }
+pre { font-family: Consolas, 'Courier New', monospace; font-size: 8.5pt; background: #2A211C; color: #F3ECE2; padding: 3mm 4mm; border-radius: 2mm; white-space: pre-wrap; page-break-inside: avoid; margin: 0 0 3mm; }
+
+table { width: 100%; border-collapse: collapse; margin: 0 0 4mm; font-size: 9.5pt; page-break-inside: auto; }
+th, td { border: 1px solid #E3D8CB; padding: 1.6mm 2.2mm; text-align: left; vertical-align: top; }
+thead th { background: var(--creme); color: var(--bordeaux); }
+tr { page-break-inside: avoid; }
+
+.encadre { border-left: 4px solid var(--or); background: var(--creme); padding: 3mm 4mm; margin: 0 0 4mm; page-break-inside: avoid; }
+.encadre.important { border-left-color: var(--alerte); background: #FDF1EF; }
+.encadre p:last-child, .encadre ul:last-child { margin-bottom: 0; }
+.sommaire ol { columns: 2; column-gap: 10mm; }
+.sommaire li { break-inside: avoid; }
+
+figure { margin: 0 0 5mm; page-break-inside: avoid; text-align: center; }
+figure img { max-width: 100%; border: 1px solid #DDD3C7; border-radius: 2mm; }
+figure img.moyen { max-width: 82%; }
+figcaption { font-size: 9pt; color: var(--gris); margin-top: 1.5mm; font-style: italic; }
+.mermaid { display: flex; justify-content: center; margin: 2mm 0; }
+.mermaid svg { max-width: 100% !important; max-height: 225mm; width: auto; height: auto; }
+
+.etapes { counter-reset: etape; list-style: none; padding-left: 0; }
+.etapes > li { counter-increment: etape; position: relative; padding-left: 9mm; margin-bottom: 2mm; }
+.etapes > li::before { content: counter(etape); position: absolute; left: 0; top: 0; width: 6mm; height: 6mm; border-radius: 50%; background: var(--bordeaux); color: #fff; font-weight: 700; font-size: 8.5pt; display: flex; align-items: center; justify-content: center; }
+.deux-col { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; }
+.badge { display: inline-block; font-size: 8.5pt; font-weight: 700; padding: .3mm 2mm; border-radius: 3mm; background: var(--creme); border: 1px solid #E3D3C0; color: var(--bordeaux); }
+.ok { color: var(--sauge); font-weight: 700; }

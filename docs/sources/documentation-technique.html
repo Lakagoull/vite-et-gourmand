@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Vite &amp; Gourmand — Documentation technique</title>
+<link rel="stylesheet" href="doc.css">
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+        startOnLoad: false, theme: 'base', securityLevel: 'strict',
+        fontFamily: 'Lato, Arial, sans-serif',
+        themeVariables: {
+            primaryColor: '#FBF6EE', primaryBorderColor: '#7A1F3D', primaryTextColor: '#2A211C',
+            lineColor: '#6B5E57', secondaryColor: '#F1F5EE', tertiaryColor: '#FFFFFF',
+            actorBkg: '#FBF6EE', actorBorder: '#7A1F3D', signalColor: '#2A211C', noteBkgColor: '#FFF6E5', noteBorderColor: '#C9973F'
+        },
+        er: { layoutDirection: 'TB' }, sequence: { mirrorActors: false }
+    });
+    // Rendu des diagrammes un par un (évite les chevauchements)
+    const decodeur = document.createElement('textarea');
+    const blocs = [...document.querySelectorAll('.mermaid')];
+    for (let i = 0; i < blocs.length; i++) {
+        decodeur.innerHTML = blocs[i].innerHTML;
+        const { svg } = await mermaid.render('diagramme-' + i, decodeur.value.trim());
+        blocs[i].innerHTML = svg;
+    }
+</script>
+</head>
+<body>
+
+<section class="couverture">
+    <div class="logo">Vite <span>&amp;</span><br>Gourmand</div>
+    <h1>Documentation technique</h1>
+    <p>Choix technologiques, architecture, modèle de données, diagrammes, sécurité et déploiement</p>
+    <div class="bas">ECF Développeur Web et Web Mobile — FastDev — Novembre 2026<br>
+        Dépôt : github.com/Lakagoull/vite-et-gourmand — Application : vite-et-gourmand-grii.onrender.com</div>
+</section>
+
+<div class="sommaire">
+    <h1>Sommaire</h1>
+    <ol>
+        <li>Réflexions initiales et choix technologiques</li>
+        <li>Architecture de l'application</li>
+        <li>Configuration de l'environnement de travail</li>
+        <li>Modèle de données (relationnel et NoSQL)</li>
+        <li>Diagramme de cas d'utilisation</li>
+        <li>Diagrammes de séquence</li>
+        <li>Règles de gestion</li>
+        <li>Sécurité</li>
+        <li>Accessibilité (RGAA) et RGPD</li>
+        <li>Tests réalisés</li>
+        <li>Déploiement</li>
+    </ol>
+</div>
+
+<!-- ============================================================ -->
+<h1 class="chapitre">1. Réflexions initiales et choix technologiques</h1>
+
+<h2>1.1 Analyse du besoin</h2>
+<p>Le cahier des charges décrit une application de vente en ligne de menus de traiteur, avec quatre profils (visiteur, utilisateur, employé, administrateur), un catalogue filtrable sans rechargement, un tunnel de commande avec calcul de prix (livraison au kilomètre, remise), un cycle de vie des commandes avec notifications par e-mail, un back-office et des statistiques issues d'une base non relationnelle. Les contraintes transverses sont la <strong>sécurité</strong>, le <strong>RGPD</strong>, l'<strong>accessibilité (RGAA)</strong> et un <strong>déploiement obligatoire</strong>.</p>
+<p>Le volume de données est faible (quelques menus, quelques centaines de commandes par an) et l'équipe cliente n'est pas technique : la solution doit être <strong>simple à exploiter</strong>, <strong>peu coûteuse</strong> et <strong>facile à maintenir</strong>.</p>
+
+<h2>1.2 Stack retenue et justification</h2>
+<table>
+    <thead><tr><th>Couche</th><th>Choix</th><th>Justification</th><th>Alternatives étudiées</th></tr></thead>
+    <tbody>
+        <tr><td>Front-end</td><td>HTML5, CSS, <strong>Bootstrap 5.3</strong>, JavaScript natif</td><td>Bootstrap fournit une grille responsive et des composants accessibles (menu mobile, formulaires) ; surchargé par la charte via des variables CSS. JavaScript natif (fetch) suffit pour les filtres dynamiques et le calcul du prix : aucune dépendance, page légère.</td><td>React / Vue : surdimensionnés pour quelques interactions, ajoutent une étape de build. Tailwind : demande plus de code de mise en page.</td></tr>
+        <tr><td>Back-end</td><td><strong>PHP 8</strong> sans framework, architecture MVC légère, <strong>PDO</strong></td><td>Stack proposée par le sujet, hébergeable partout. L'absence de framework permet de démontrer la maîtrise des mécanismes (routage, sessions, CSRF, requêtes préparées) et garde un code court et lisible.</td><td>Symfony / Laravel : très complets mais masquent ces mécanismes ; Node.js (Express) : possible, mais PHP est demandé par l'exemple de stack.</td></tr>
+        <tr><td>Base relationnelle</td><td><strong>MySQL 8</strong> (MariaDB en local)</td><td>Modèle très relationnel (menus, plats, allergènes en n-n ; commandes ; avis) : intégrité référentielle, transactions et verrous indispensables pour le stock.</td><td>PostgreSQL : équivalent ; MySQL retenu car présent dans XAMPP et proposé gratuitement par l'hébergeur choisi.</td></tr>
+        <tr><td>Base NoSQL</td><td><strong>MongoDB</strong></td><td>Exigée pour les statistiques. Une collection dénormalisée (une copie par commande) se prête bien aux agrégations (<code>$group</code>, <code>$sum</code>) par menu et par période.</td><td>Redis : peu adapté aux agrégations ; Elasticsearch : trop lourd.</td></tr>
+        <tr><td>E-mails</td><td><strong>PHPMailer</strong> (SMTP)</td><td>Bibliothèque de référence : encodage UTF-8, protection contre l'injection d'en-têtes, SMTP chiffré.</td><td>Fonction <code>mail()</code> : peu fiable et non sécurisée.</td></tr>
+        <tr><td>Géolocalisation</td><td><strong>API Adresse</strong> (Base Adresse Nationale)</td><td>Service public, gratuit, sans clé : vérifie l'adresse, identifie la commune (code INSEE de Bordeaux) et donne les coordonnées GPS pour le calcul des kilomètres.</td><td>Google Maps : clé et facturation obligatoires.</td></tr>
+        <tr><td>Déploiement</td><td><strong>Docker</strong> sur <strong>Render</strong> + <strong>Aiven</strong> (MySQL) + <strong>MongoDB Atlas</strong></td><td>Offres gratuites sans carte bancaire, HTTPS automatique, déploiement continu depuis GitHub, serveurs dans l'UE. Docker garantit un environnement identique à chaque déploiement.</td><td>Heroku : plus d'offre gratuite ; Fly.io : carte bancaire requise ; Vercel : pas adapté à PHP avec extension MongoDB.</td></tr>
+    </tbody>
+</table>
+
+<h2>1.3 Dépendances</h2>
+<p>Volontairement réduites au minimum (surface d'attaque et maintenance) : <code>phpmailer/phpmailer</code> (via Composer), Bootstrap 5.3.3 et les polices Lato / Playfair Display (<strong>hébergés localement</strong>, voir RGPD). Les extensions PHP utilisées sont <code>pdo_mysql</code>, <code>mongodb</code>, <code>gd</code>, <code>mbstring</code> et <code>openssl</code>.</p>
+
+<!-- ============================================================ -->
+<h1 class="chapitre">2. Architecture de l'application</h1>
+
+<h2>2.1 Organisation MVC</h2>
+<p>L'application suit le modèle <strong>MVC</strong> avec un <strong>point d'entrée unique</strong> (<em>front controller</em>) : toutes les requêtes passent par <code>public/index.php</code>, qui charge la configuration, démarre une session sécurisée, envoie les en-têtes de sécurité puis confie la requête au routeur.</p>
+<div class="mermaid">
+flowchart LR
+    N([Navigateur]) -->|requête HTTP| I[public/index.php<br/>point d'entrée]
+    I --> B[src/bootstrap.php<br/>.env, session, en-têtes]
+    I --> R[Router<br/>méthode + chemin]
+    R --> C[Contrôleur<br/>validation, droits]
+    C --> M[Modèles<br/>PDO / MongoDB]
+    M --> DB[(MySQL)]
+    C --> S[Services<br/>Auth, Mailer, Tarification,<br/>Géolocalisation, Upload, Statistiques]
+    S --> MG[(MongoDB)]
+    C --> V[Gabarits<br/>templates/*.php]
+    V -->|HTML| N
+</div>
+
+<h2>2.2 Arborescence</h2>
+<pre>vite-et-gourmand/
+├── public/                 Racine web (seul dossier exposé)
+│   ├── index.php           Point d'entrée unique + déclaration des routes
+│   ├── .htaccess           Réécriture d'URL Apache
+│   └── assets/             CSS, JS, polices, images, Bootstrap
+├── src/
+│   ├── bootstrap.php       Configuration, session, en-têtes de sécurité
+│   ├── helpers.php         Échappement, CSRF, rendu, messages flash
+│   ├── Database.php        Connexion PDO unique (TLS en production)
+│   ├── Router.php          Routeur minimaliste
+│   ├── Controllers/        Page, Menu, Contact, Auth, Commande, Espace,
+│   │                       Gestion, GestionCommande, GestionMenu, Admin
+│   ├── Models/             Menu, Plat, Commande, Utilisateur, Avis, Horaire
+│   └── Services/           Auth, Mailer, Tarification, Geolocalisation,
+│                           Upload, Statistiques
+├── templates/              layout.php, pages/, partials/
+├── database/               schema.sql, data.sql, mongo-init.js,
+│                           sync-mongo.php, import.php
+├── docs/                   PDF (charte, manuel, documentations)
+├── Dockerfile, docker/     Image de production
+└── render.yaml             Déploiement (Infrastructure as Code)</pre>
+
+<h2>2.3 Principes de conception</h2>
+<ul>
+    <li><strong>Séparation des responsabilités</strong> : les contrôleurs valident les entrées et vérifient les droits ; les modèles contiennent tout le SQL ; les services portent la logique réutilisable (calcul du prix, envoi d'e-mails…) ; les gabarits ne font qu'afficher.</li>
+    <li><strong>Une seule source de vérité pour les prix</strong> : le service <code>Tarification</code> est utilisé à la fois par l'API de devis (affichage en direct) et à la validation de la commande. Le prix affiché en JavaScript n'est jamais repris tel quel.</li>
+    <li><strong>Amélioration progressive</strong> : la liste des menus est rendue côté serveur et fonctionne sans JavaScript ; le JavaScript ajoute le filtrage instantané via l'API <code>/api/menus</code>.</li>
+    <li><strong>Configuration par variables d'environnement</strong> (fichier <code>.env</code> en local, tableau de bord de l'hébergeur en production) : aucun secret dans le code.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h1 class="chapitre">3. Configuration de l'environnement de travail</h1>
+<table>
+    <thead><tr><th>Outil</th><th>Version</th><th>Rôle</th></tr></thead>
+    <tbody>
+        <tr><td>Windows 11</td><td>—</td><td>Système du poste de développement</td></tr>
+        <tr><td>Visual Studio Code</td><td>—</td><td>Éditeur de code</td></tr>
+        <tr><td>XAMPP</td><td>PHP 8.0.30, MariaDB 10.4</td><td>PHP en ligne de commande et base relationnelle locale</td></tr>
+        <tr><td>Extension PHP mongodb</td><td>1.20.1</td><td>Pilote MongoDB pour PHP (ajoutée dans <code>php.ini</code>, avec <code>gd</code>)</td></tr>
+        <tr><td>MongoDB Server + mongosh</td><td>9.0 / 2.14</td><td>Base NoSQL locale et son terminal</td></tr>
+        <tr><td>Composer</td><td>2.11</td><td>Gestion des dépendances PHP et autoload PSR-4</td></tr>
+        <tr><td>Git + GitHub CLI</td><td>2.54 / 2.103</td><td>Versionnement, dépôt public, branches</td></tr>
+        <tr><td>Microsoft Edge</td><td>—</td><td>Tests, outils de développement, export PDF</td></tr>
+    </tbody>
+</table>
+<h2>Mise en route en local</h2>
+<pre>git clone https://github.com/Lakagoull/vite-et-gourmand.git
+cd vite-et-gourmand
+composer install
+cp .env.example .env                       # adapter les accès
+mysql -u root -p &lt; database/schema.sql     # ou : php database/import.php
+mysql -u root -p &lt; database/data.sql
+mongosh "mongodb://127.0.0.1:27017" database/mongo-init.js
+php database/sync-mongo.php                 # copie des commandes vers MongoDB
+php -S localhost:8000 -t public public/index.php</pre>
+<p>En local, si <code>SMTP_HOST</code> est vide, les e-mails sont écrits dans <code>storage/mails/</code> (fichiers <code>.eml</code>), ce qui permet de tester tous les envois sans serveur de messagerie.</p>
+
+<!-- ============================================================ -->
+<h1 class="chapitre">4. Modèle de données</h1>
+
+<h2>4.1 Modèle relationnel (MySQL)</h2>
+<p>Le modèle reprend le MCD de l'annexe 1 et le complète pour couvrir tout le cahier des charges.</p>
+<div class="mermaid">
+erDiagram
+    ROLE ||--o{ UTILISATEUR : "possède"
+    UTILISATEUR ||--o{ COMMANDE : "passe"
+    UTILISATEUR ||--o{ AVIS : "publie"
+    UTILISATEUR ||--o{ REINITIALISATION_MDP : "demande"
+    COMMANDE ||--o| AVIS : "reçoit"
+    COMMANDE ||--o{ COMMANDE_SUIVI : "historise"
+    MENU ||--o{ COMMANDE : "est commandé"
+    THEME ||--o{ MENU : "classe"
+    REGIME ||--o{ MENU : "adapte"
+    MENU ||--o{ MENU_IMAGE : "illustre"
+    MENU ||--o{ MENU_PLAT : "propose"
+    PLAT ||--o{ MENU_PLAT : "compose"
+    PLAT ||--o{ PLAT_ALLERGENE : "contient"
+    ALLERGENE ||--o{ PLAT_ALLERGENE : "concerne"
+    UTILISATEUR {
+        int utilisateur_id PK
+        varchar email UK
+        varchar password "hash bcrypt"
+        varchar nom
+        varchar prenom
+        varchar telephone
+        varchar adresse_postale
+        varchar ville
+        bool actif
+        int role_id FK
+    }
+    MENU {
+        int menu_id PK
+        varchar titre
+        text description
+        int nombre_personne_minimum
+        decimal prix_par_personne
+        text conditions
+        int delai_commande_jours
+        int quantite_restante
+        int theme_id FK
+        int regime_id FK
+    }
+    COMMANDE {
+        int commande_id PK
+        varchar numero_commande UK
+        date date_prestation
+        time heure_livraison
+        varchar adresse_prestation
+        decimal distance_km
+        int nombre_personne
+        decimal prix_menu
+        decimal remise
+        decimal prix_livraison
+        decimal prix_total
+        enum statut
+        bool pret_materiel
+        bool restitution_materiel
+        text motif_annulation
+        enum mode_contact_annulation
+    }
+    PLAT {
+        int plat_id PK
+        varchar titre_plat
+        enum type_plat
+        varchar photo
+    }
+    AVIS {
+        int avis_id PK
+        tinyint note "1 à 5"
+        text description
+        enum statut
+    }
+    HORAIRE {
+        int horaire_id PK
+        varchar jour
+        time heure_ouverture
+        time heure_fermeture
+    }
+    TENTATIVE_CONNEXION {
+        int tentative_id PK
+        varchar email
+        varchar adresse_ip
+        datetime date_tentative
+    }
+</div>
+<p class="encadre">Tables simples non détaillées ci-dessus : <code>role</code>, <code>theme</code>, <code>regime</code>, <code>allergene</code> (identifiant + libellé), <code>menu_image</code> (chemin, texte alternatif, ordre), <code>commande_suivi</code> (statut, date), <code>reinitialisation_mdp</code> (empreinte du jeton, expiration, utilisé). <code>tentative_connexion</code> et <code>horaire</code> sont indépendantes.</p>
+
+<h2>4.2 Écarts avec l'annexe et justifications</h2>
+<table>
+    <thead><tr><th>Évolution</th><th>Justification</th></tr></thead>
+    <tbody>
+        <tr><td>Prix en <code>DECIMAL</code> au lieu de <code>DOUBLE</code></td><td>Les nombres flottants provoquent des erreurs d'arrondi sur les montants (0,1 + 0,2 ≠ 0,3).</td></tr>
+        <tr><td>Prix <strong>figés</strong> dans la commande (menu, remise, livraison, total, distance)</td><td>Un changement de tarif ultérieur ne modifie pas l'historique ni le chiffre d'affaires.</td></tr>
+        <tr><td>Table <code>menu_image</code></td><td>Le menu dispose d'une <em>galerie</em> d'images (relation 1-n), avec un texte alternatif obligatoire (RGAA).</td></tr>
+        <tr><td>Table <code>commande_suivi</code></td><td>Le suivi doit lister tous les états avec date et heure.</td></tr>
+        <tr><td>Colonne <code>delai_commande_jours</code></td><td>Rend vérifiable automatiquement la condition « à commander x jours avant ».</td></tr>
+        <tr><td>Colonne <code>actif</code></td><td>Rendre inutilisable un compte employé sans le supprimer (historique conservé).</td></tr>
+        <tr><td>Tables <code>reinitialisation_mdp</code> et <code>tentative_connexion</code></td><td>Mot de passe oublié sécurisé et protection contre la force brute.</td></tr>
+        <tr><td>Photo du plat en chemin de fichier (<code>VARCHAR</code>) au lieu de <code>BLOB</code></td><td>Base plus légère, images servies directement et mises en cache par le serveur web.</td></tr>
+        <tr><td>Contraintes <code>CHECK</code>, clés uniques, <code>ON DELETE CASCADE</code> ciblés</td><td>Intégrité garantie par la base (note 1-5, stock ≥ 0, un seul avis par commande…).</td></tr>
+    </tbody>
+</table>
+
+<h2>4.3 Base NoSQL (MongoDB)</h2>
+<p>Collection <code>statistiques_commandes</code> : un document par commande, copie dénormalisée créée à la commande et mise à jour à chaque changement (statut, modification). Un schéma de validation (<code>$jsonSchema</code>) et deux index (<code>commande_id</code> unique ; <code>menu_id + date_commande</code> pour les filtres) sont créés par <code>mongo-init.js</code>.</p>
+<pre>{
+  "commande_id": 2, "numero_commande": "VG-2026-0002",
+  "menu_id": 2, "menu_titre": "Menu de Pâques Printanier",
+  "nombre_personne": 9, "prix_total": 302.21,
+  "date_commande": ISODate("2026-10-01T08:05:00Z"), "statut": "terminee"
+}</pre>
+<p>Le chiffre d'affaires par menu est calculé par un pipeline d'agrégation : <code>$match</code> (statut ≠ annulée, menu, période) → <code>$group</code> par <code>menu_id</code> (<code>$sum</code> des commandes et des montants) → <code>$sort</code>. Une erreur MongoDB n'empêche jamais l'enregistrement d'une commande (elle est journalisée) ; le script <code>sync-mongo.php</code> permet de reconstruire la collection à partir de MySQL.</p>
+
+<!-- ============================================================ -->
+<h1 class="chapitre">5. Diagramme de cas d'utilisation</h1>
+<div class="mermaid">
+flowchart LR
+    V(["👤 Visiteur"])
+    U(["👤 Utilisateur"])
+    E(["👤 Employé"])
+    A(["👤 Administrateur"])
+    U -. hérite .-> V
+    A -. hérite .-> E
+    subgraph Application Vite & Gourmand
+        direction TB
+        V1[Consulter l'accueil et les avis]
+        V2[Consulter et filtrer les menus]
+        V3[Voir le détail d'un menu]
+        V4[Contacter l'entreprise]
+        V5[Créer un compte]
+        U1[Se connecter / mot de passe oublié]
+        U2[Commander un menu]
+        U3[Suivre ses commandes]
+        U4[Modifier / annuler une commande en attente]
+        U5[Donner un avis]
+        U6[Modifier ses informations]
+        E1[Gérer les commandes et leurs statuts]
+        E2[Annuler / modifier après contact client]
+        E3[Gérer menus, plats et horaires]
+        E4[Valider ou refuser les avis]
+        A1[Créer / désactiver un compte employé]
+        A2[Consulter les statistiques]
+    end
+    V --- V1 & V2 & V3 & V4 & V5
+    U --- U1 & U2 & U3 & U4 & U5 & U6
+    E --- E1 & E2 & E3 & E4
+    A --- A1 & A2
+</div>
+<p>L'utilisateur dispose de toutes les fonctions du visiteur ; l'administrateur de toutes celles de l'employé (vérifié dans le service <code>Auth::exiger()</code>). La connexion est commune aux trois profils authentifiés.</p>
+
+<!-- ============================================================ -->
+<h1 class="chapitre">6. Diagrammes de séquence</h1>
+
+<h2>6.1 Commande d'un menu</h2>
+<div class="mermaid">
+sequenceDiagram
+    actor C as Client
+    participant N as Navigateur (commande.js)
+    participant S as Serveur PHP
+    participant G as API Adresse (BAN)
+    participant DB as MySQL
+    participant MG as MongoDB
+    participant M as Serveur SMTP
+    C->>N: Saisit adresse, date, nombre de personnes
+    N->>S: GET /api/devis (menu, nb, adresse)
+    S->>G: Localiser l'adresse
+    G-->>S: Commune + coordonnées GPS
+    S-->>N: Détail du prix (JSON)
+    N-->>C: Affiche menu, remise, livraison, total
+    C->>N: Valide la commande
+    N->>S: POST /commande (+ jeton CSRF)
+    S->>S: Vérifie session, rôle, CSRF, champs, délai, minimum
+    S->>G: Re-localise l'adresse (prix recalculé côté serveur)
+    S->>DB: BEGIN, SELECT stock FOR UPDATE
+    alt stock disponible
+        S->>DB: INSERT commande + suivi, stock − 1, COMMIT
+        S->>MG: Copie de la commande (statistiques)
+        S->>M: E-mail de confirmation
+        S-->>N: Redirection vers le détail de la commande
+    else stock épuisé
+        S->>DB: ROLLBACK
+        S-->>N: Message « menu épuisé »
+    end
+</div>
+
+<h2>6.2 Changement de statut par un employé</h2>
+<div class="mermaid">
+sequenceDiagram
+    actor E as Employé
+    participant S as Serveur PHP
+    participant DB as MySQL
+    participant MG as MongoDB
+    participant M as Serveur SMTP
+    E->>S: POST /employe/commande/statut (statut, CSRF)
+    S->>S: Auth::exiger('employe') — compte actif et rôle
+    S->>DB: BEGIN, SELECT statut FOR UPDATE
+    S->>S: Transition autorisée ? (etapesSuivantes)
+    alt transition valide
+        S->>DB: UPDATE statut (+ prêt / restitution matériel), INSERT suivi, COMMIT
+        S->>MG: Mise à jour du statut
+        opt retour de matériel
+            S->>M: E-mail « 10 jours ouvrés, 600 € de frais »
+        end
+        opt commande terminée
+            S->>M: E-mail « donnez votre avis »
+        end
+        S-->>E: Statut mis à jour
+    else transition interdite
+        S->>DB: ROLLBACK
+        S-->>E: « Changement de statut non autorisé »
+    end
+</div>
+
+<!-- ============================================================ -->
+<h1 class="chapitre">7. Règles de gestion</h1>
+<table>
+    <thead><tr><th>Règle</th><th>Mise en œuvre</th></tr></thead>
+    <tbody>
+        <tr><td>Prix du menu</td><td>prix par personne × nombre de personnes ; le prix affiché sur le catalogue correspond au nombre minimum de personnes.</td></tr>
+        <tr><td>Remise de 10 %</td><td>Appliquée si nombre de personnes ≥ minimum du menu + 5.</td></tr>
+        <tr><td>Livraison</td><td>Gratuite si la commune est Bordeaux (code INSEE 33063) ; sinon 5 € + 0,59 € × km. Distance calculée à vol d'oiseau depuis l'atelier (formule de haversine).</td></tr>
+        <tr><td>Minimum de personnes</td><td>Refus en dessous du minimum du menu (contrôle serveur + attribut <code>min</code>).</td></tr>
+        <tr><td>Délai de commande</td><td>Date de prestation ≥ aujourd'hui + délai du menu (au moins 1 jour), au plus 1 an.</td></tr>
+        <tr><td>Stock</td><td>Décrémenté à la commande dans une transaction avec verrou ; rendu en cas d'annulation ; menu non commandable à 0.</td></tr>
+        <tr><td>Modification / annulation client</td><td>Uniquement en statut « en attente » ; le menu ne peut pas être changé.</td></tr>
+        <tr><td>Modification / annulation employé</td><td>Mode de contact (téléphone / e-mail) et motif obligatoires ; impossible une fois la livraison commencée.</td></tr>
+        <tr><td>Cycle de vie</td><td>en attente → acceptée → en préparation → en cours de livraison → livrée → (attente retour matériel) → terminée ; aucune étape ne peut être sautée.</td></tr>
+        <tr><td>Avis</td><td>Un seul par commande terminée, note 1 à 5, publié après validation par un employé.</td></tr>
+        <tr><td>Comptes</td><td>Inscription = rôle utilisateur imposé ; comptes employés créés par l'administrateur ; aucun compte administrateur créable depuis l'application.</td></tr>
+        <tr><td>Suppression d'un menu</td><td>Refusée s'il a déjà été commandé (historique et chiffre d'affaires).</td></tr>
+    </tbody>
+</table>
+
+<!-- ============================================================ -->
+<h1 class="chapitre">8. Sécurité</h1>
+<p>La sécurité a été traitée à chaque fonctionnalité, puis vérifiée par des tests d'attaque (voir chapitre 10).</p>
+<table>
+    <thead><tr><th>Risque</th><th>Protection mise en place</th></tr></thead>
+    <tbody>
+        <tr><td>Injection SQL</td><td>100 % des requêtes avec paramètres passent par des <strong>requêtes préparées PDO</strong>, émulation désactivée (<code>ATTR_EMULATE_PREPARES = false</code>). Les filtres sont validés et typés (<code>filter_var</code>).</td></tr>
+        <tr><td>XSS (injection de script)</td><td>Toute donnée affichée passe par la fonction <code>e()</code> (<code>htmlspecialchars</code>). Côté JavaScript, construction du DOM avec <code>textContent</code> (jamais <code>innerHTML</code> avec des données). <strong>Content-Security-Policy</strong> stricte : aucun script ni style en ligne autorisé, ressources du seul domaine.</td></tr>
+        <tr><td>CSRF</td><td>Jeton aléatoire de 256 bits par session, vérifié avec <code>hash_equals</code> sur chaque formulaire POST ; cookie <code>SameSite=Lax</code>.</td></tr>
+        <tr><td>Mots de passe</td><td>Hachage <strong>bcrypt</strong> (<code>password_hash</code>), re-hachage automatique si l'algorithme évolue ; politique : 10 caractères, majuscule, minuscule, chiffre, caractère spécial.</td></tr>
+        <tr><td>Force brute</td><td>Blocage après 5 échecs par e-mail (et 20 par IP) sur 15 minutes ; temps de réponse constant même pour un compte inexistant ; messages d'erreur identiques (pas d'énumération des comptes).</td></tr>
+        <tr><td>Vol de session</td><td>Cookie <code>HttpOnly</code>, <code>Secure</code> en HTTPS, <code>SameSite</code> ; <code>session_regenerate_id</code> à la connexion ; mode strict ; destruction complète à la déconnexion.</td></tr>
+        <tr><td>Mot de passe oublié</td><td>Jeton aléatoire de 256 bits, seule son empreinte SHA-256 est stockée ; valable 1 h, usage unique, anciens liens invalidés ; réponse identique que l'adresse existe ou non.</td></tr>
+        <tr><td>Contrôle d'accès</td><td><code>Auth::exiger()</code> sur chaque action protégée : rôle vérifié et compte toujours actif en base (un employé désactivé est déconnecté immédiatement). Un client ne peut accéder qu'à ses propres commandes (contrôle du propriétaire, sinon 404).</td></tr>
+        <tr><td>Élévation de privilèges</td><td>Le rôle est toujours imposé côté serveur (inscription = utilisateur, création par l'admin = employé) ; les champs ajoutés dans la requête sont ignorés.</td></tr>
+        <tr><td>Redirection ouverte</td><td>Le paramètre de retour après connexion n'accepte que des chemins internes (pas de <code>//</code>, pas de schéma, pas d'antislash).</td></tr>
+        <tr><td>Envoi de fichiers</td><td>Taille limitée (3 Mo), <strong>vrai type vérifié</strong> (<code>finfo</code>), image <strong>ré-encodée avec GD</strong> (suppression des métadonnées et de tout contenu caché), nom aléatoire, extension imposée <code>.jpg</code>.</td></tr>
+        <tr><td>Manipulation des prix</td><td>Prix, remise et livraison recalculés côté serveur à partir de la base ; le stock est vérifié sous verrou (pas de survente).</td></tr>
+        <tr><td>Spam</td><td>Champ piège invisible et limitation d'un envoi par minute (contact, mot de passe oublié).</td></tr>
+        <tr><td>En-têtes HTTP</td><td><code>Content-Security-Policy</code>, <code>Strict-Transport-Security</code>, <code>X-Frame-Options: DENY</code>, <code>X-Content-Type-Options: nosniff</code>, <code>Referrer-Policy</code>, <code>Permissions-Policy</code> ; signature serveur masquée.</td></tr>
+        <tr><td>Secrets et erreurs</td><td>Accès aux bases dans des variables d'environnement (jamais dans le dépôt, <code>.env</code> ignoré par Git) ; erreurs détaillées affichées uniquement en développement ; connexion MySQL chiffrée (TLS) avec vérification du certificat en production.</td></tr>
+    </tbody>
+</table>
+
+<!-- ============================================================ -->
+<h1 class="chapitre">9. Accessibilité (RGAA) et RGPD</h1>
+<h2>9.1 Accessibilité</h2>
+<ul>
+    <li>Contrastes calculés et conformes (≥ 4,5:1) pour toutes les associations texte / fond (voir charte graphique).</li>
+    <li>Structure sémantique : <code>header</code>, <code>nav</code>, <code>main</code>, <code>footer</code>, titres hiérarchisés, fil d'Ariane, <code>aria-current</code> sur la page active.</li>
+    <li>Lien d'évitement « Aller au contenu principal » ; navigation complète au clavier ; focus visible renforcé.</li>
+    <li>Formulaires : chaque champ a une étiquette ; erreurs listées en haut avec liens vers les champs et reliées au champ (<code>aria-invalid</code>, <code>aria-describedby</code>) ; formats attendus indiqués.</li>
+    <li>Information jamais portée par la seule couleur : conditions du menu avec icône et titre, statuts avec libellé.</li>
+    <li>Zones dynamiques annoncées (<code>aria-live</code>) : nombre de résultats des filtres, détail du prix.</li>
+    <li>Images : texte alternatif obligatoire pour la galerie ; images décoratives ignorées (<code>alt=""</code>).</li>
+    <li>Graphiques : description textuelle, barres atteignables au clavier, tableau de données équivalent, adaptation au mode contraste élevé.</li>
+    <li>Respect de la préférence « réduire les animations » ; zones cliquables d'au moins 44 px.</li>
+</ul>
+<h2>9.2 RGPD</h2>
+<ul>
+    <li>Minimisation : seules les données nécessaires à la commande et à la livraison sont demandées.</li>
+    <li>Consentement explicite aux CGV et à la politique de confidentialité à l'inscription.</li>
+    <li>Pages mentions légales, CGV et politique de confidentialité (finalités, durées de conservation, droits, CNIL).</li>
+    <li>Droit de rectification depuis l'espace client.</li>
+    <li>Aucun cookie publicitaire ni de mesure d'audience : uniquement le cookie de session (exempté de consentement).</li>
+    <li>Bootstrap et polices hébergés sur le serveur : aucune adresse IP de visiteur transmise à un CDN ou à Google Fonts.</li>
+    <li>Hébergement de l'application dans l'Union européenne (région Francfort).</li>
+</ul>
+
+<!-- ============================================================ -->
+<h1 class="chapitre">10. Tests réalisés</h1>
+<p>Chaque fonctionnalité a été testée sur une branche dédiée avant sa fusion dans <code>develop</code>, au moyen de scénarios automatisés en ligne de commande (requêtes HTTP réelles avec gestion des cookies et des jetons CSRF) et de vérifications visuelles (captures d'écran bureau et mobile).</p>
+<table>
+    <thead><tr><th>Domaine</th><th>Scénarios vérifiés</th><th>Résultat</th></tr></thead>
+    <tbody>
+        <tr><td>Catalogue</td><td>Chaque filtre seul et combinés ; paramètre malveillant (<code>theme=abc'OR1=1</code>) ignoré</td><td class="ok">Conforme</td></tr>
+        <tr><td>Contact</td><td>Envoi sans jeton CSRF (refus 419), champs invalides, balise <code>&lt;script&gt;</code> neutralisée</td><td class="ok">Conforme</td></tr>
+        <tr><td>Comptes</td><td>Mot de passe faible refusé, inscription + mail de bienvenue, rôles et accès (403), redirections malveillantes, blocage après 5 échecs, réinitialisation (lien unique, expiré, réutilisé)</td><td class="ok">Conforme</td></tr>
+        <tr><td>Commande</td><td>Prix (Bordeaux, Mérignac, Arcachon, remise), minimum, délai, stock décrémenté puis rendu, copie MongoDB, accès à la commande d'un autre client (404), modification après acceptation refusée</td><td class="ok">Conforme</td></tr>
+        <tr><td>Avis</td><td>Refusé avant la fin de la commande, note hors limites, second avis, validation / refus</td><td class="ok">Conforme</td></tr>
+        <tr><td>Employé</td><td>Cycle de vie complet, saut d'étape refusé, prêt de matériel, mails automatiques, annulation sans contact refusée</td><td class="ok">Conforme</td></tr>
+        <tr><td>Envoi d'images</td><td>Image valide acceptée ; script PHP renommé en <code>.jpg</code> refusé</td><td class="ok">Conforme</td></tr>
+        <tr><td>Administrateur</td><td>Création d'employé (rôle forcé, mail sans mot de passe), désactivation avec session ouverte, statistiques MongoDB comparées à un calcul MySQL (tous filtres)</td><td class="ok">Conforme</td></tr>
+        <tr><td>Production</td><td>Pages, connexion, base MySQL et statistiques MongoDB sur le site en ligne, en-têtes de sécurité</td><td class="ok">Conforme</td></tr>
+    </tbody>
+</table>
+
+<!-- ============================================================ -->
+<h1 class="chapitre">11. Déploiement</h1>
+
+<h2>11.1 Architecture de production</h2>
+<div class="mermaid">
+flowchart LR
+    U([Visiteurs]) -->|HTTPS| R[Render — conteneur Docker<br/>PHP 8.2 + Apache<br/>région Francfort]
+    GH[GitHub<br/>branche main] -->|déploiement automatique| R
+    R -->|TLS — certificat vérifié| A[(Aiven<br/>MySQL 8)]
+    R -->|TLS — mongodb+srv| M[(MongoDB Atlas<br/>cluster M0)]
+    R -->|HTTPS| B[API Adresse<br/>data.gouv.fr]
+    R -.->|SMTP chiffré| S[Serveur d'e-mails]
+</div>
+
+<h2>11.2 Démarche et étapes</h2>
+<ol class="etapes">
+    <li><strong>Conteneurisation</strong> : le <code>Dockerfile</code> part de l'image officielle <code>php:8.2-apache</code>, installe les extensions <code>pdo_mysql</code>, <code>gd</code> et <code>mongodb</code>, place la racine web sur <code>public/</code>, active la réécriture d'URL, passe PHP en configuration de production et installe les dépendances Composer sans les outils de développement. Le script <code>docker/entrypoint.sh</code> adapte Apache au port fourni par l'hébergeur et écrit le certificat MySQL transmis en variable d'environnement.</li>
+    <li><strong>Base relationnelle</strong> : création d'un service MySQL gratuit sur Aiven ; récupération de l'hôte, du port, de l'utilisateur, du mot de passe et du certificat d'autorité. Import de <code>schema.sql</code> et <code>data.sql</code> avec <code>php database/import.php production.env</code> (connexion TLS ; le client MySQL de XAMPP ne gérant pas l'authentification <code>caching_sha2_password</code> de MySQL 8, l'import passe par PDO).</li>
+    <li><strong>Base NoSQL</strong> : création d'un cluster gratuit M0 sur MongoDB Atlas, d'un utilisateur de base, et autorisation réseau (liste d'accès IP) ; exécution de <code>mongo-init.js</code> (collection, validation, index) puis <code>php database/sync-mongo.php</code> pour copier les commandes depuis MySQL.</li>
+    <li><strong>Hébergement</strong> : sur Render, création d'un <em>Blueprint</em> à partir du fichier <code>render.yaml</code> du dépôt (service web Docker, offre gratuite, région UE, branche <code>main</code>). Les secrets (accès aux bases, certificat, SMTP) sont saisis dans le tableau de bord, jamais versionnés.</li>
+    <li><strong>Mise en production</strong> : fusion de <code>develop</code> dans <code>main</code> ; Render construit l'image et la déploie automatiquement. Chaque nouvelle fusion dans <code>main</code> redéploie l'application.</li>
+    <li><strong>Vérification</strong> : test de toutes les pages, de la connexion, des données MySQL, des statistiques MongoDB et des en-têtes de sécurité sur l'URL publique.</li>
+</ol>
+
+<h2>11.3 Variables d'environnement</h2>
+<table>
+    <thead><tr><th>Variable</th><th>Rôle</th></tr></thead>
+    <tbody>
+        <tr><td><code>APP_ENV</code>, <code>APP_URL</code></td><td>Mode (prod : erreurs masquées) et adresse publique (liens des e-mails)</td></tr>
+        <tr><td><code>DB_HOST</code>, <code>DB_PORT</code>, <code>DB_NAME</code>, <code>DB_USER</code>, <code>DB_PASSWORD</code></td><td>Accès MySQL</td></tr>
+        <tr><td><code>DB_CA_CERT</code></td><td>Certificat d'autorité pour la connexion TLS vérifiée</td></tr>
+        <tr><td><code>MONGO_URI</code>, <code>MONGO_DB</code></td><td>Accès MongoDB Atlas</td></tr>
+        <tr><td><code>SMTP_HOST</code>, <code>SMTP_PORT</code>, <code>SMTP_USER</code>, <code>SMTP_PASSWORD</code>, <code>MAIL_FROM</code>, <code>MAIL_ENTREPRISE</code></td><td>Envoi des e-mails et adresse de l'entreprise (formulaire de contact)</td></tr>
+        <tr><td><code>TRUST_PROXY</code></td><td>Lecture de l'IP réelle derrière le proxy de l'hébergeur (limiteur de tentatives)</td></tr>
+    </tbody>
+</table>
+
+<h2>11.4 Limites connues et évolutions</h2>
+<ul>
+    <li><strong>Mise en veille</strong> de l'offre gratuite après 15 minutes d'inactivité (premier chargement ≈ 30 s). Évolution : offre payante « always on ».</li>
+    <li><strong>Stockage éphémère</strong> : les photos envoyées en production sont perdues à chaque redéploiement. Évolution : stockage objet externe (type S3) ou disque persistant.</li>
+    <li><strong>E-mails</strong> : l'envoi réel nécessite de renseigner un serveur SMTP (par exemple Brevo) dans les variables d'environnement ; sans SMTP, les e-mails sont enregistrés côté serveur.</li>
+    <li><strong>Distance</strong> calculée à vol d'oiseau : un calcul d'itinéraire routier nécessiterait un service de routage.</li>
+</ul>
+
+</body>
+</html>

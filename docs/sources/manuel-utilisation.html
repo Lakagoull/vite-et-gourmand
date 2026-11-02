@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Vite &amp; Gourmand — Manuel d'utilisation</title>
+<link rel="stylesheet" href="doc.css">
+</head>
+<body>
+
+<section class="couverture">
+    <div class="logo">Vite <span>&amp;</span><br>Gourmand</div>
+    <h1>Manuel d'utilisation</h1>
+    <p>Application web de commande de menus — traiteur à Bordeaux</p>
+    <p>Parcours visiteur, client, employé et administrateur</p>
+    <div class="bas">ECF Développeur Web et Web Mobile — FastDev — Novembre 2026</div>
+</section>
+
+<h1>1. Présentation</h1>
+<p><strong>Vite &amp; Gourmand</strong> est l'application web du traiteur bordelais tenu par Julie et José depuis 25 ans. Elle permet de présenter les menus de l'entreprise (Noël, Pâques, classiques, évènements), de les commander en ligne et de suivre chaque commande jusqu'à sa livraison.</p>
+<p>L'application distingue quatre profils :</p>
+<table>
+    <thead><tr><th>Profil</th><th>Ce qu'il peut faire</th></tr></thead>
+    <tbody>
+        <tr><td><strong>Visiteur</strong> (non connecté)</td><td>Consulter l'accueil, les menus (avec filtres) et leur détail, contacter l'entreprise, créer un compte.</td></tr>
+        <tr><td><strong>Utilisateur</strong> (client)</td><td>Commander un menu, suivre ses commandes, les modifier ou les annuler tant qu'elles ne sont pas acceptées, donner un avis, gérer ses informations.</td></tr>
+        <tr><td><strong>Employé</strong></td><td>Gérer les commandes (statuts, modification, annulation), les menus, les plats, les horaires et valider les avis.</td></tr>
+        <tr><td><strong>Administrateur</strong></td><td>Tout ce que fait un employé, plus la gestion des comptes employés et les statistiques (graphique et chiffre d'affaires).</td></tr>
+    </tbody>
+</table>
+
+<h2>Accès à l'application</h2>
+<table>
+    <tbody>
+        <tr><th>Application en ligne</th><td><a href="https://vite-et-gourmand-grii.onrender.com">https://vite-et-gourmand-grii.onrender.com</a></td></tr>
+        <tr><th>Code source (GitHub)</th><td><a href="https://github.com/Lakagoull/vite-et-gourmand">https://github.com/Lakagoull/vite-et-gourmand</a></td></tr>
+        <tr><th>Installation en local</th><td>Voir le fichier <code>README.md</code> du dépôt</td></tr>
+    </tbody>
+</table>
+<div class="encadre">
+    <p><strong>Premier chargement :</strong> l'application est hébergée sur une offre gratuite qui se met en veille après 15 minutes sans visite. La première page peut donc mettre environ 30 secondes à s'afficher ; les suivantes sont immédiates.</p>
+</div>
+
+<h2>Comptes de test</h2>
+<p>Ces comptes permettent de réaliser tous les parcours décrits dans ce manuel.</p>
+<table>
+    <thead><tr><th>Profil</th><th>Identifiant (e-mail)</th><th>Mot de passe</th></tr></thead>
+    <tbody>
+        <tr><td>Administrateur (José)</td><td><code>jose@vite-gourmand.fr</code></td><td><code>Jose@Admin2026</code></td></tr>
+        <tr><td>Employée (Julie)</td><td><code>julie@vite-gourmand.fr</code></td><td><code>Julie@Employe2026</code></td></tr>
+        <tr><td>Client (Sophie)</td><td><code>client.demo@example.com</code></td><td><code>Client@Demo2026</code></td></tr>
+    </tbody>
+</table>
+<p>Vous pouvez aussi créer votre propre compte client depuis la page « Créer un compte ».</p>
+
+<h2>Navigation générale</h2>
+<ul>
+    <li><strong>Menu principal</strong> (en haut) : Accueil, Nos menus, Contact, Connexion. Une fois connecté : « Mon espace » et « Déconnexion ». Sur mobile, le menu s'ouvre avec le bouton ☰.</li>
+    <li><strong>Pied de page</strong> : horaires d'ouverture du lundi au dimanche, adresse, liens vers les mentions légales, les conditions générales de vente et la politique de confidentialité.</li>
+    <li><strong>Accessibilité</strong> : toutes les pages se parcourent au clavier (touche Tab). Un lien « Aller au contenu principal » apparaît dès la première tabulation.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h1 class="chapitre">2. Parcours visiteur</h1>
+
+<h2>2.1 Page d'accueil</h2>
+<p>La page d'accueil présente l'entreprise, met en avant le professionnalisme de l'équipe et affiche les avis clients validés par l'équipe.</p>
+<figure><img src="captures/accueil.jpg" alt="Page d'accueil"><figcaption>Page d'accueil : présentation, équipe et avis clients</figcaption></figure>
+
+<h2>2.2 Consulter les menus et les filtrer</h2>
+<p>Cliquez sur <strong>Nos menus</strong>. Chaque menu affiche son titre, sa description, le nombre minimum de personnes et le prix correspondant.</p>
+<p>Les filtres à gauche (ou derrière le bouton « Filtrer les menus » sur mobile) permettent une recherche rapide. <strong>La liste se met à jour automatiquement à chaque saisie, sans recharger la page</strong> :</p>
+<ul>
+    <li><strong>Prix maximum</strong> — exemple : 150 € ;</li>
+    <li><strong>Fourchette de prix</strong> — minimum et maximum ;</li>
+    <li><strong>Thème</strong> — Noël, Pâques, Classique, Évènement ;</li>
+    <li><strong>Régime</strong> — Classique, Végétarien, Vegan, Sans gluten, Halal ;</li>
+    <li><strong>Nombre de personnes</strong> — affiche les menus commandables pour ce nombre de convives.</li>
+</ul>
+<p>Le bouton <strong>Réinitialiser</strong> efface tous les filtres.</p>
+<figure><img src="captures/menus.jpg" alt="Vue globale des menus avec filtres"><figcaption>Vue globale des menus avec les filtres</figcaption></figure>
+
+<h2>2.3 Détail d'un menu</h2>
+<p>Cliquez sur <strong>Voir le détail</strong> d'un menu. La page affiche :</p>
+<ul>
+    <li>la galerie d'images (cliquez sur une vignette pour l'agrandir) ;</li>
+    <li>le thème, le régime, la description, le nombre minimum de personnes, le prix et le stock restant ;</li>
+    <li><strong>les conditions du menu, encadrées en rouge</strong> (délai de commande, conservation) ;</li>
+    <li>la composition : entrées, plats et desserts, avec les <strong>allergènes</strong> de chaque plat ;</li>
+    <li>le bouton <strong>Commander ce menu</strong>. Un visiteur non connecté est invité à se connecter ou à créer un compte, puis il est ramené directement sur le formulaire de commande.</li>
+</ul>
+<figure><img src="captures/detail.jpg" alt="Vue détaillée d'un menu"><figcaption>Vue détaillée : galerie, prix, conditions mises en évidence et allergènes</figcaption></figure>
+
+<h2>2.4 Contacter l'entreprise</h2>
+<p>Cliquez sur <strong>Contact</strong>, puis renseignez un titre, votre message et votre adresse e-mail. La demande est envoyée par e-mail à l'entreprise, qui vous répondra à l'adresse indiquée.</p>
+
+<h2>2.5 Créer un compte</h2>
+<p>Depuis <strong>Connexion</strong> → <strong>Créer un compte</strong>, renseignez votre nom, prénom, numéro de mobile, adresse e-mail et adresse postale, puis choisissez un mot de passe. Il doit contenir <strong>au moins 10 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial</strong> ; les règles se cochent en vert pendant la saisie. Acceptez les CGV et la politique de confidentialité, puis validez.</p>
+<p>Le compte reçoit automatiquement le rôle « utilisateur », vous êtes connecté et un <strong>e-mail de bienvenue</strong> vous est envoyé.</p>
+<figure><img src="captures/inscription.jpg" alt="Formulaire de création de compte" class="moyen"><figcaption>Création de compte avec l'aide à la saisie du mot de passe</figcaption></figure>
+
+<!-- ============================================================ -->
+<h1 class="chapitre">3. Parcours client</h1>
+<p class="encadre">Connectez-vous avec le compte <code>client.demo@example.com</code> / <code>Client@Demo2026</code>.</p>
+
+<h2>3.1 Se connecter et mot de passe oublié</h2>
+<p>Cliquez sur <strong>Connexion</strong>, saisissez votre e-mail et votre mot de passe. Après 5 essais erronés, la connexion est bloquée pendant 15 minutes (protection contre les attaques automatisées).</p>
+<p>En cas d'oubli, cliquez sur <strong>Mot de passe oublié ?</strong> et indiquez votre e-mail : un lien de réinitialisation vous est envoyé. Il est valable <strong>1 heure</strong> et ne fonctionne qu'une seule fois.</p>
+
+<h2>3.2 Commander un menu</h2>
+<ol class="etapes">
+    <li>Depuis le détail d'un menu, cliquez sur <strong>Commander ce menu</strong>. Le formulaire s'ouvre avec le menu déjà sélectionné et vos informations (nom, e-mail, mobile) remplies automatiquement.</li>
+    <li>Indiquez l'<strong>adresse</strong> de la prestation, la <strong>date</strong> et l'<strong>heure de livraison</strong>. L'adresse est vérifiée automatiquement ; la première date possible tient compte du délai de commande du menu.</li>
+    <li>Choisissez le <strong>nombre de personnes</strong> (au moins le minimum du menu).</li>
+    <li>Le <strong>détail du prix</strong> se met à jour en direct à droite :
+        <ul>
+            <li>prix du menu = prix par personne × nombre de personnes ;</li>
+            <li><strong>réduction de 10 %</strong> à partir du minimum du menu + 5 personnes ;</li>
+            <li>livraison <strong>offerte à Bordeaux</strong>, sinon <strong>5 € + 0,59 € par kilomètre</strong>.</li>
+        </ul>
+    </li>
+    <li>Lisez les conditions du menu, cochez la case de confirmation, puis cliquez sur <strong>Valider ma commande</strong>. Un <strong>e-mail de confirmation</strong> vous est envoyé.</li>
+</ol>
+<figure><img src="captures/commande.jpg" alt="Formulaire de commande"><figcaption>Formulaire de commande avec détail du prix en direct</figcaption></figure>
+
+<h2>3.3 Suivre, modifier ou annuler une commande</h2>
+<p>Cliquez sur <strong>Mon espace</strong> : la liste de vos commandes s'affiche avec leur statut. Cliquez sur <strong>Détail</strong> pour voir une commande.</p>
+<ul>
+    <li><strong>Tant que la commande est « En attente de validation »</strong>, vous pouvez la <strong>modifier</strong> (adresse, date, heure, nombre de personnes — le menu ne peut pas être changé) ou l'<strong>annuler</strong>.</li>
+    <li><strong>Dès qu'elle est acceptée</strong> par l'équipe, le <strong>suivi</strong> apparaît : chaque étape est affichée avec sa date et son heure.</li>
+</ul>
+<figure><img src="captures/suivi.jpg" alt="Détail et suivi d'une commande"><figcaption>Détail d'une commande terminée avec son suivi daté</figcaption></figure>
+
+<h2>3.4 Donner un avis</h2>
+<p>Quand la commande est « Terminée », vous recevez un e-mail vous invitant à donner votre avis. Dans le détail de la commande, choisissez une <strong>note de 1 à 5</strong>, écrivez un commentaire et envoyez. L'avis est publié sur la page d'accueil après validation par un employé.</p>
+
+<h2>3.5 Modifier ses informations</h2>
+<p>Dans <strong>Mon espace</strong> → <strong>Mes informations</strong>, modifiez vos coordonnées. Pour changer de mot de passe, saisissez d'abord le mot de passe actuel.</p>
+
+<!-- ============================================================ -->
+<h1 class="chapitre">4. Parcours employé</h1>
+<p class="encadre">Connectez-vous avec le compte <code>julie@vite-gourmand.fr</code> / <code>Julie@Employe2026</code>. L'espace employé s'ouvre automatiquement. Les onglets en haut donnent accès à chaque fonction.</p>
+
+<h2>4.1 Tableau de bord</h2>
+<p>Il résume le travail à faire : commandes à valider, à préparer, matériel à récupérer et avis à modérer. Chaque tuile est cliquable.</p>
+<figure><img src="captures/tdb.jpg" alt="Tableau de bord employé" class="moyen"><figcaption>Tableau de bord de l'espace employé</figcaption></figure>
+
+<h2>4.2 Gérer les commandes</h2>
+<p>Onglet <strong>Commandes</strong> : filtrez par <strong>statut</strong> ou recherchez un <strong>client</strong> (nom, e-mail ou numéro de commande), puis cliquez sur <strong>Gérer</strong>.</p>
+<p><strong>Faire avancer une commande</strong> — les étapes s'enchaînent dans l'ordre, sans saut possible :</p>
+<table>
+    <thead><tr><th>Statut</th><th>Signification</th></tr></thead>
+    <tbody>
+        <tr><td>Acceptée</td><td>La commande reçue est validée par l'équipe.</td></tr>
+        <tr><td>En préparation</td><td>L'équipe cuisine prépare la commande.</td></tr>
+        <tr><td>En cours de livraison</td><td>L'équipe logistique livre la commande.</td></tr>
+        <tr><td>Livrée</td><td>Le client a été livré. <strong>Cochez « Du matériel a été prêté »</strong> si c'est le cas.</td></tr>
+        <tr><td>En attente du retour de matériel</td><td>Seulement si du matériel a été prêté. Le client reçoit un e-mail : restitution sous 10 jours ouvrés, sinon 600 € de frais (CGV).</td></tr>
+        <tr><td>Terminée</td><td>Commande livrée sans prêt, ou matériel restitué. Le client reçoit un e-mail l'invitant à donner son avis.</td></tr>
+    </tbody>
+</table>
+<p><strong>Modifier ou annuler une commande</strong> : ces actions ne sont possibles qu'<strong>après avoir contacté le client</strong>. Le formulaire exige d'indiquer le <strong>mode de contact</strong> (téléphone ou e-mail) et le <strong>motif</strong>. Le client est prévenu par e-mail, et en cas d'annulation le stock du menu est rendu.</p>
+<figure><img src="captures/gestion-commande.jpg" alt="Gestion d'une commande"><figcaption>Gestion d'une commande : statut, modification et annulation avec contact préalable</figcaption></figure>
+
+<h2>4.3 Gérer les menus et les plats</h2>
+<ul>
+    <li><strong>Menus</strong> : créez ou modifiez un menu (titre, description, thème, régime, nombre minimum de personnes, prix par personne, délai de commande, stock, conditions), cochez les plats qui le composent et ajoutez des photos (JPEG, PNG ou WebP, avec une description pour l'accessibilité). Un menu déjà commandé ne peut pas être supprimé : mettez son stock à 0 pour le retirer de la vente.</li>
+    <li><strong>Plats</strong> : créez ou modifiez un plat (nom, type entrée/plat/dessert, photo) et cochez ses allergènes. Un même plat peut figurer dans plusieurs menus.</li>
+</ul>
+<figure><img src="captures/menu-form.jpg" alt="Formulaire de modification d'un menu"><figcaption>Modification d'un menu : informations, composition et galerie</figcaption></figure>
+
+<h2>4.4 Horaires et avis</h2>
+<ul>
+    <li><strong>Horaires</strong> : modifiez les heures d'ouverture et de fermeture de chaque jour, ou cochez « Fermé ». Le pied de page du site est mis à jour immédiatement.</li>
+    <li><strong>Avis</strong> : les avis « À modérer » peuvent être <strong>validés</strong> (ils apparaissent sur la page d'accueil) ou <strong>refusés</strong>.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h1 class="chapitre">5. Parcours administrateur</h1>
+<p class="encadre">Connectez-vous avec le compte <code>jose@vite-gourmand.fr</code> / <code>Jose@Admin2026</code>. L'administrateur dispose de toutes les fonctions de l'employé, plus les onglets <strong>Employés</strong> et <strong>Statistiques</strong>.</p>
+
+<h2>5.1 Gérer les comptes employés</h2>
+<ul>
+    <li><strong>Créer un compte</strong> : saisissez l'e-mail (identifiant) et un mot de passe sécurisé (prénom et nom facultatifs). L'employé reçoit un e-mail l'informant de la création de son compte, <strong>sans le mot de passe</strong> : il doit se rapprocher de l'administrateur pour l'obtenir.</li>
+    <li><strong>Désactiver un compte</strong> (départ de l'entreprise) : l'employé ne peut plus se connecter, et s'il était connecté il est déconnecté dès sa prochaine action. Le compte peut être réactivé.</li>
+    <li>Il est <strong>impossible de créer un compte administrateur</strong> depuis l'application.</li>
+</ul>
+<figure><img src="captures/employes.jpg" alt="Gestion des comptes employés" class="moyen"><figcaption>Gestion des comptes employés</figcaption></figure>
+
+<h2>5.2 Statistiques</h2>
+<p>L'onglet <strong>Statistiques</strong> affiche, à partir de la base NoSQL (MongoDB) :</p>
+<ul>
+    <li>le <strong>chiffre d'affaires</strong> et le <strong>nombre de commandes</strong> de la période ;</li>
+    <li>un <strong>graphique comparant le nombre de commandes par menu</strong> ;</li>
+    <li>un <strong>graphique du chiffre d'affaires par menu</strong> ;</li>
+    <li>un tableau détaillé (bouton « Voir les données sous forme de tableau »).</li>
+</ul>
+<p>Les filtres permettent de choisir <strong>un menu</strong> et <strong>une période</strong> (du … au …). Survolez une barre (ou atteignez-la au clavier) pour afficher sa valeur. Les commandes annulées ne sont pas comptées.</p>
+<figure><img src="captures/stats.jpg" alt="Statistiques"><figcaption>Statistiques : chiffre d'affaires et commandes par menu</figcaption></figure>
+
+<h2>5.3 Récapitulatif des e-mails automatiques</h2>
+<table>
+    <thead><tr><th>Évènement</th><th>Destinataire</th></tr></thead>
+    <tbody>
+        <tr><td>Création de compte</td><td>Le client (e-mail de bienvenue)</td></tr>
+        <tr><td>Mot de passe oublié</td><td>L'utilisateur (lien valable 1 h)</td></tr>
+        <tr><td>Commande validée</td><td>Le client (confirmation et détail du prix)</td></tr>
+        <tr><td>Modification / annulation par un employé</td><td>Le client (avec le motif)</td></tr>
+        <tr><td>Statut « En attente du retour de matériel »</td><td>Le client (10 jours ouvrés, 600 € de frais)</td></tr>
+        <tr><td>Statut « Terminée »</td><td>Le client (invitation à donner son avis)</td></tr>
+        <tr><td>Formulaire de contact</td><td>L'entreprise</td></tr>
+        <tr><td>Création d'un compte employé</td><td>L'employé (sans le mot de passe)</td></tr>
+    </tbody>
+</table>
+<p class="encadre">En environnement local, si aucun serveur d'envoi (SMTP) n'est configuré, les e-mails sont enregistrés dans le dossier <code>storage/mails</code> sous forme de fichiers <code>.eml</code>, lisibles avec un logiciel de messagerie.</p>
+
+</body>
+</html>
