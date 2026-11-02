@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Vite &amp; Gourmand — Gestion de projet</title>
+<link rel="stylesheet" href="doc.css">
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+        startOnLoad: false, theme: 'base', securityLevel: 'strict', fontFamily: 'Lato, Arial, sans-serif',
+        themeVariables: {
+            primaryColor: '#FBF6EE', primaryBorderColor: '#7A1F3D', primaryTextColor: '#2A211C', lineColor: '#6B5E57',
+            git0: '#7A1F3D', git1: '#C9973F', git2: '#4F6F4A', git3: '#4F6F4A', git4: '#4F6F4A', git5: '#4F6F4A', git6: '#4F6F4A', git7: '#4F6F4A',
+            gitBranchLabel0: '#ffffff', gitBranchLabel1: '#2A211C', commitLabelFontSize: '11px'
+        },
+        gitGraph: { mainBranchName: 'main', showCommitLabel: false }
+    });
+    const decodeur = document.createElement('textarea');
+    const blocs = [...document.querySelectorAll('.mermaid')];
+    for (let i = 0; i < blocs.length; i++) {
+        decodeur.innerHTML = blocs[i].innerHTML;
+        const { svg } = await mermaid.render('diagramme-' + i, decodeur.value.trim());
+        blocs[i].innerHTML = svg;
+    }
+</script>
+</head>
+<body>
+
+<section class="couverture">
+    <div class="logo">Vite <span>&amp;</span><br>Gourmand</div>
+    <h1>Gestion de projet</h1>
+    <p>Méthode, organisation, planification et outils</p>
+    <div class="bas">ECF Développeur Web et Web Mobile — FastDev — Novembre 2026</div>
+</section>
+
+<h1>1. Contexte et organisation</h1>
+<p>Le projet est mené pour le compte de <strong>Vite &amp; Gourmand</strong> (Julie et José), au sein de l'agence <strong>FastDev</strong>, sous la direction d'un chef de projet qui a recueilli les besoins. Le développement est réalisé par un développeur web full-stack, chargé de l'ensemble de la chaîne : analyse, maquettage, intégration, développement, tests et déploiement.</p>
+<table>
+    <thead><tr><th>Rôle</th><th>Personne</th><th>Responsabilités</th></tr></thead>
+    <tbody>
+        <tr><td>Clients / utilisateurs métier</td><td>Julie et José</td><td>Expriment le besoin, valident les fonctionnalités</td></tr>
+        <tr><td>Chef de projet</td><td>FastDev</td><td>Recueil des besoins, priorisation, suivi des livraisons</td></tr>
+        <tr><td>Développeur full-stack</td><td>Moi</td><td>Conception, développement, tests, documentation, déploiement</td></tr>
+    </tbody>
+</table>
+
+<h2>Livrables</h2>
+<ul>
+    <li>Dépôt GitHub public : <a href="https://github.com/Lakagoull/vite-et-gourmand">github.com/Lakagoull/vite-et-gourmand</a> (code, scripts SQL, README) ;</li>
+    <li>Application déployée : <a href="https://vite-et-gourmand-grii.onrender.com">vite-et-gourmand-grii.onrender.com</a> ;</li>
+    <li>Documents PDF : charte graphique et maquettes, manuel d'utilisation, documentation technique, présent document ;</li>
+    <li>Outil de gestion de projet : tableau Kanban (voir partie 3).</li>
+</ul>
+
+<!-- ============================================================ -->
+<h1 class="chapitre">2. Méthode de travail</h1>
+<h2>2.1 Une démarche agile en Kanban</h2>
+<p>J'ai retenu une <strong>méthode agile de type Kanban</strong>, adaptée à un développeur seul : pas de cérémonies lourdes, mais un flux de travail visible, un nombre limité de tâches en cours et des livraisons fréquentes.</p>
+<ul>
+    <li><strong>Découpage en fonctionnalités</strong> : le cahier des charges a été transformé en <em>user stories</em> regroupées en lots cohérents, chacun livrable et testable seul (une branche Git par lot).</li>
+    <li><strong>Limitation du travail en cours</strong> : une seule fonctionnalité en développement à la fois, terminée et testée avant de passer à la suivante.</li>
+    <li><strong>Définition de « terminé »</strong> : une carte n'est terminée que si le code fonctionne, que les cas d'erreur et la sécurité ont été testés, que l'affichage a été vérifié (bureau et mobile) et que la branche est fusionnée dans <code>develop</code>.</li>
+    <li><strong>Amélioration continue</strong> : les difficultés rencontrées ont été notées et corrigées au fil de l'eau (voir partie 6).</li>
+</ul>
+
+<h2>2.2 Priorisation (MoSCoW)</h2>
+<table>
+    <thead><tr><th>Priorité</th><th>Fonctionnalités</th></tr></thead>
+    <tbody>
+        <tr><td><span class="badge">Must</span> indispensable</td><td>Base de données, catalogue et filtres, détail du menu, comptes et rôles, commande avec calcul du prix, espaces utilisateur / employé / administrateur, statistiques MongoDB, sécurité, déploiement</td></tr>
+        <tr><td><span class="badge">Should</span> important</td><td>E-mails automatiques, suivi des commandes, avis clients, gestion des horaires, accessibilité RGAA, pages légales</td></tr>
+        <tr><td><span class="badge">Could</span> confort</td><td>Calcul du prix en direct, vérification d'adresse, aide à la saisie du mot de passe, version mobile des graphiques</td></tr>
+        <tr><td><span class="badge">Won't</span> hors périmètre</td><td>Paiement en ligne, application mobile native, calcul d'itinéraire routier</td></tr>
+    </tbody>
+</table>
+
+<!-- ============================================================ -->
+<h1 class="chapitre">3. Tableau Kanban</h1>
+<p>Le suivi des tâches se fait dans un tableau <strong>Trello</strong> organisé en colonnes :</p>
+<table>
+    <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
+    <tbody>
+        <tr><td><strong>Backlog</strong></td><td>Toutes les user stories issues du cahier des charges, priorisées</td></tr>
+        <tr><td><strong>À faire</strong></td><td>Les cartes du lot en cours, prêtes à être développées</td></tr>
+        <tr><td><strong>En cours</strong></td><td>Une seule fonctionnalité à la fois (branche <code>feature/...</code> ouverte)</td></tr>
+        <tr><td><strong>En test</strong></td><td>Développement terminé, scénarios de test et vérifications visuelles en cours</td></tr>
+        <tr><td><strong>Terminé</strong></td><td>Testé et fusionné dans <code>develop</code></td></tr>
+    </tbody>
+</table>
+<p>Chaque carte contient la user story, ses critères d'acceptation (repris du cahier des charges), une étiquette de priorité (MoSCoW) et une étiquette de domaine (Front, Back, BDD, Sécurité, Déploiement, Documentation).</p>
+<div class="encadre">
+    <p><strong>Lien du tableau :</strong> ______________________________________________</p>
+</div>
+
+<h2>Exemples de user stories</h2>
+<table>
+    <thead><tr><th>En tant que…</th><th>je veux…</th><th>afin de…</th></tr></thead>
+    <tbody>
+        <tr><td>visiteur</td><td>filtrer les menus par prix, thème, régime et nombre de personnes sans recharger la page</td><td>trouver rapidement un menu adapté</td></tr>
+        <tr><td>visiteur</td><td>voir les conditions d'un menu bien en évidence</td><td>ne pas être surpris par un délai ou une contrainte</td></tr>
+        <tr><td>utilisateur</td><td>voir le détail du prix (menu, remise, livraison) avant de valider</td><td>commander en connaissance de cause</td></tr>
+        <tr><td>utilisateur</td><td>modifier ou annuler ma commande tant qu'elle n'est pas acceptée</td><td>corriger une erreur sans appeler le traiteur</td></tr>
+        <tr><td>employé</td><td>faire avancer le statut d'une commande et prévenir le client automatiquement</td><td>suivre la production et la livraison</td></tr>
+        <tr><td>employé</td><td>indiquer le mode de contact et le motif avant d'annuler une commande</td><td>garder une trace de l'échange avec le client</td></tr>
+        <tr><td>administrateur</td><td>comparer le nombre de commandes et le chiffre d'affaires par menu sur une période</td><td>piloter l'offre de menus</td></tr>
+        <tr><td>administrateur</td><td>désactiver le compte d'un employé qui quitte l'entreprise</td><td>protéger l'accès à l'application</td></tr>
+    </tbody>
+</table>
+
+<!-- ============================================================ -->
+<h1 class="chapitre">4. Planification et déroulement</h1>
+<p>Le projet a été découpé en neuf lots successifs. L'ordre suit les dépendances techniques : la base de données et la charte d'abord, puis les fonctionnalités du visiteur vers l'administrateur, enfin la mise en production et la documentation.</p>
+<table>
+    <thead><tr><th>#</th><th>Lot</th><th>Contenu</th><th>Branche Git</th></tr></thead>
+    <tbody>
+        <tr><td>1</td><td>Initialisation</td><td>Analyse du sujet, choix de la stack, installation de l'environnement, dépôt GitHub, branches <code>main</code> / <code>develop</code></td><td><code>main</code></td></tr>
+        <tr><td>2</td><td>Base de données</td><td>MCD complété, scripts de création et de données, collection MongoDB</td><td><code>feature/base-de-donnees</code></td></tr>
+        <tr><td>3</td><td>Charte et maquettes</td><td>Palette vérifiée (contrastes), typographie, 3 wireframes et 3 maquettes bureau et mobile</td><td><code>feature/charte-graphique</code></td></tr>
+        <tr><td>4</td><td>Pages publiques</td><td>Architecture MVC, accueil, catalogue filtrable, détail, contact, pages légales</td><td><code>feature/pages-publiques</code></td></tr>
+        <tr><td>5</td><td>Authentification</td><td>Inscription, connexion, rôles, mot de passe oublié, protection force brute</td><td><code>feature/authentification</code></td></tr>
+        <tr><td>6</td><td>Commande et espace client</td><td>Tunnel de commande, calcul du prix, suivi, modification, annulation, avis, profil</td><td><code>feature/commande</code></td></tr>
+        <tr><td>7</td><td>Espace employé</td><td>Gestion des commandes, menus, plats, horaires, avis, envoi d'images</td><td><code>feature/espace-employe</code></td></tr>
+        <tr><td>8</td><td>Espace administrateur</td><td>Comptes employés, statistiques MongoDB et graphiques</td><td><code>feature/espace-admin</code></td></tr>
+        <tr><td>9</td><td>Déploiement et documentation</td><td>Docker, Render, Aiven, Atlas, import des données, documents PDF</td><td><code>feature/deploiement</code>, <code>feature/import-production</code></td></tr>
+    </tbody>
+</table>
+
+<!-- ============================================================ -->
+<h1 class="chapitre">5. Gestion du code source (Git)</h1>
+<h2>5.1 Stratégie de branches</h2>
+<ul>
+    <li><code>main</code> : branche principale, toujours stable ; c'est elle qui est déployée automatiquement en production.</li>
+    <li><code>develop</code> : branche d'intégration des fonctionnalités terminées et testées.</li>
+    <li><code>feature/...</code> : une branche par fonctionnalité, créée depuis <code>develop</code>. Après les tests, elle est fusionnée dans <code>develop</code> avec <code>--no-ff</code> (un commit de fusion garde la trace de la fonctionnalité dans l'historique).</li>
+    <li>Quand <code>develop</code> est correctement testée, elle est fusionnée dans <code>main</code>, ce qui déclenche le déploiement.</li>
+</ul>
+<div class="mermaid">
+gitGraph
+    commit id: "Initialisation"
+    branch develop
+    checkout develop
+    branch feature/base-de-donnees
+    commit id: "Scripts SQL + MongoDB"
+    checkout develop
+    merge feature/base-de-donnees
+    branch feature/charte-graphique
+    commit id: "Charte + maquettes"
+    checkout develop
+    merge feature/charte-graphique
+    branch feature/pages-publiques
+    commit id: "Pages publiques"
+    checkout develop
+    merge feature/pages-publiques
+    branch feature/authentification
+    commit id: "Authentification"
+    checkout develop
+    merge feature/authentification
+    branch feature/commande
+    commit id: "Commande"
+    checkout develop
+    merge feature/commande
+    branch feature/espace-employe
+    commit id: "Espace employé"
+    checkout develop
+    merge feature/espace-employe
+    commit id: "Espace admin, déploiement…"
+    checkout main
+    merge develop id: "v1.0 en production"
+</div>
+<p class="text-center" style="text-align:center;font-size:9pt;color:#6B5E57;font-style:italic">Extrait de l'historique : les fonctionnalités suivantes (feature/espace-admin, feature/deploiement, feature/import-production) suivent exactement le même cycle.</p>
+
+<h2>5.2 Bonnes pratiques appliquées</h2>
+<ul>
+    <li><strong>Messages de commit explicites</strong> en français : un titre court décrivant la fonctionnalité, puis la liste des changements.</li>
+    <li><strong>Secrets jamais versionnés</strong> : <code>.env</code> et les accès de production sont exclus par <code>.gitignore</code> ; seul <code>.env.example</code> (sans valeurs sensibles) est dans le dépôt.</li>
+    <li><strong>Fins de ligne normalisées</strong> (<code>.gitattributes</code>) pour un dépôt identique sous Windows et Linux.</li>
+    <li><strong>Dépendances reproductibles</strong> : <code>composer.lock</code> versionné, dossier <code>vendor/</code> exclu.</li>
+    <li><strong>Déploiement continu</strong> : toute fusion dans <code>main</code> est déployée automatiquement par Render.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h1 class="chapitre">6. Qualité, outils et difficultés rencontrées</h1>
+<h2>6.1 Assurance qualité</h2>
+<ul>
+    <li><strong>Tests par scénarios</strong> à chaque fonctionnalité : cas nominaux, cas d'erreur et tentatives d'attaque (injection, CSRF, accès à la commande d'un autre client, élévation de privilèges, faux fichier image…), via de vraies requêtes HTTP.</li>
+    <li><strong>Vérifications visuelles</strong> systématiques (captures d'écran bureau et mobile) comparées aux maquettes.</li>
+    <li><strong>Contrôle de cohérence des données</strong> : statistiques MongoDB comparées à un calcul direct en SQL.</li>
+    <li><strong>Vérification syntaxique</strong> de tous les fichiers PHP (<code>php -l</code>) avant chaque commit.</li>
+</ul>
+
+<h2>6.2 Outils</h2>
+<table>
+    <thead><tr><th>Besoin</th><th>Outil</th></tr></thead>
+    <tbody>
+        <tr><td>Gestion des tâches</td><td>Trello (Kanban)</td></tr>
+        <tr><td>Versionnement</td><td>Git, GitHub, GitHub CLI</td></tr>
+        <tr><td>Développement</td><td>Visual Studio Code, XAMPP (PHP, MariaDB), MongoDB + mongosh, Composer</td></tr>
+        <tr><td>Maquettes et documents</td><td>HTML / CSS exportés en PDF, diagrammes Mermaid</td></tr>
+        <tr><td>Hébergement</td><td>Docker, Render, Aiven, MongoDB Atlas</td></tr>
+    </tbody>
+</table>
+
+<h2>6.3 Difficultés rencontrées et solutions</h2>
+<table>
+    <thead><tr><th>Difficulté</th><th>Solution apportée</th></tr></thead>
+    <tbody>
+        <tr><td>La politique de sécurité (CSP) interdit les styles en ligne, nécessaires à un graphique classique.</td><td>Graphiques dessinés en SVG côté serveur (les dimensions sont des attributs, pas des styles), sans bibliothèque externe.</td></tr>
+        <tr><td>Derrière le proxy de l'hébergeur, tous les visiteurs semblaient avoir la même adresse IP (risque de bloquer tout le monde après des erreurs de connexion).</td><td>Lecture de l'IP réelle dans l'en-tête <code>X-Forwarded-For</code> quand <code>TRUST_PROXY</code> est activé ; la limite par e-mail reste la protection principale.</td></tr>
+        <tr><td>Le client MySQL de XAMPP ne gère pas l'authentification de MySQL 8 utilisée par l'hébergeur.</td><td>Script d'import en PHP (<code>database/import.php</code>) utilisant PDO, compatible et chiffré.</td></tr>
+        <tr><td>Une règle métier écrite en texte libre (« à commander 14 jours avant ») n'était pas vérifiable.</td><td>Ajout d'un champ « délai de commande en jours » au menu, contrôlé à la commande.</td></tr>
+        <tr><td>Risque de survente si deux clients commandent le dernier menu en même temps.</td><td>Transaction SQL avec verrou de ligne (<code>SELECT … FOR UPDATE</code>) sur le stock.</td></tr>
+        <tr><td>Version de PHP différente entre le poste (8.0) et la production (8.2).</td><td>Code limité aux fonctionnalités de PHP 8.0 ; image Docker pour figer l'environnement de production.</td></tr>
+        <tr><td>Peu de commandes dans les données de démonstration, graphiques peu parlants.</td><td>Ajout de commandes historiques aux prix calculés selon les règles réelles, et script de synchronisation MySQL → MongoDB.</td></tr>
+    </tbody>
+</table>
+
+</body>
+</html>
