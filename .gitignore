@@ -2,3 +2,7 @@
 .env
 *.log
 .vscode/
+/storage/mails/*
+!/storage/mails/.gitkeep
+/public/assets/images/uploads/*
+!/public/assets/images/uploads/.gitkeep

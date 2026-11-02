@@ -1,0 +1,106 @@
+<?php
+/**
+ * Point d'entrée unique de l'application (front controller).
+ */
+
+declare(strict_types=1);
+
+// Serveur PHP intégré : laisser servir directement les fichiers statiques (CSS, JS, images)
+if (PHP_SAPI === 'cli-server' && is_file(__DIR__ . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))) {
+    return false;
+}
+
+require dirname(__DIR__) . '/src/bootstrap.php';
+
+use App\Controllers\AdminController;
+use App\Controllers\AuthController;
+use App\Controllers\CommandeController;
+use App\Controllers\ContactController;
+use App\Controllers\EspaceController;
+use App\Controllers\GestionCommandeController;
+use App\Controllers\GestionController;
+use App\Controllers\GestionMenuController;
+use App\Controllers\MenuController;
+use App\Controllers\PageController;
+use App\Router;
+
+$router = new Router();
+
+// Pages publiques
+$router->get('/', [PageController::class, 'accueil']);
+$router->get('/menus', [MenuController::class, 'index']);
+$router->get('/menu', [MenuController::class, 'detail']);
+$router->get('/api/menus', [MenuController::class, 'api']);
+$router->get('/contact', [ContactController::class, 'formulaire']);
+$router->post('/contact', [ContactController::class, 'envoyer']);
+$router->get('/mentions-legales', [PageController::class, 'mentionsLegales']);
+$router->get('/cgv', [PageController::class, 'cgv']);
+$router->get('/confidentialite', [PageController::class, 'confidentialite']);
+
+// Comptes et authentification
+$router->get('/inscription', [AuthController::class, 'inscriptionForm']);
+$router->post('/inscription', [AuthController::class, 'inscrire']);
+$router->get('/connexion', [AuthController::class, 'connexionForm']);
+$router->post('/connexion', [AuthController::class, 'connecter']);
+$router->post('/deconnexion', [AuthController::class, 'deconnecter']);
+$router->get('/mot-de-passe-oublie', [AuthController::class, 'oubliForm']);
+$router->post('/mot-de-passe-oublie', [AuthController::class, 'envoyerLien']);
+$router->get('/reinitialiser-mot-de-passe', [AuthController::class, 'reinitialiserForm']);
+$router->post('/reinitialiser-mot-de-passe', [AuthController::class, 'reinitialiser']);
+
+// Espaces réservés
+// Commande
+$router->get('/commande', [CommandeController::class, 'formulaire']);
+$router->post('/commande', [CommandeController::class, 'valider']);
+$router->get('/api/devis', [CommandeController::class, 'devis']);
+
+// Espace utilisateur
+$router->get('/espace', [EspaceController::class, 'utilisateur']);
+$router->get('/espace/commande', [EspaceController::class, 'commande']);
+$router->get('/espace/commande/modifier', [EspaceController::class, 'modifierForm']);
+$router->post('/espace/commande/modifier', [EspaceController::class, 'modifier']);
+$router->post('/espace/commande/annuler', [EspaceController::class, 'annuler']);
+$router->post('/espace/avis', [EspaceController::class, 'avis']);
+$router->get('/espace/profil', [EspaceController::class, 'profilForm']);
+$router->post('/espace/profil', [EspaceController::class, 'profil']);
+
+// Espace employé (accessible aussi à l'administrateur)
+$router->get('/employe', [GestionController::class, 'employe']);
+$router->get('/employe/commandes', [GestionCommandeController::class, 'index']);
+$router->get('/employe/commande', [GestionCommandeController::class, 'detail']);
+$router->post('/employe/commande/statut', [GestionCommandeController::class, 'statut']);
+$router->post('/employe/commande/annuler', [GestionCommandeController::class, 'annuler']);
+$router->get('/employe/commande/modifier', [GestionCommandeController::class, 'modifierForm']);
+$router->post('/employe/commande/modifier', [GestionCommandeController::class, 'modifier']);
+$router->get('/employe/menus', [GestionMenuController::class, 'menus']);
+$router->get('/employe/menu', [GestionMenuController::class, 'menuForm']);
+$router->post('/employe/menu', [GestionMenuController::class, 'menuEnregistrer']);
+$router->post('/employe/menu/supprimer', [GestionMenuController::class, 'menuSupprimer']);
+$router->post('/employe/menu/image/supprimer', [GestionMenuController::class, 'imageSupprimer']);
+$router->get('/employe/plats', [GestionMenuController::class, 'plats']);
+$router->get('/employe/plat', [GestionMenuController::class, 'platForm']);
+$router->post('/employe/plat', [GestionMenuController::class, 'platEnregistrer']);
+$router->post('/employe/plat/supprimer', [GestionMenuController::class, 'platSupprimer']);
+$router->get('/employe/horaires', [GestionController::class, 'horairesForm']);
+$router->post('/employe/horaires', [GestionController::class, 'horaires']);
+$router->get('/employe/avis', [GestionController::class, 'avis']);
+$router->post('/employe/avis', [GestionController::class, 'modererAvis']);
+
+// Espace administrateur
+$router->get('/admin', [GestionController::class, 'admin']);
+$router->get('/admin/employes', [AdminController::class, 'employes']);
+$router->post('/admin/employes', [AdminController::class, 'creerEmploye']);
+$router->post('/admin/employes/statut', [AdminController::class, 'basculerEmploye']);
+$router->get('/admin/statistiques', [AdminController::class, 'statistiques']);
+
+try {
+    $router->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
+} catch (Throwable $e) {
+    error_log((string) $e);
+    http_response_code(500);
+    if (env('APP_ENV') === 'dev') {
+        echo '<pre>' . e((string) $e) . '</pre>';
+    } else {
+        render('erreur', ['titre' => 'Erreur', 'message' => 'Une erreur inattendue est survenue. Merci de réessayer plus tard.']);
+    }
+}

@@ -1,0 +1,47 @@
+# Déploiement sur Render (Infrastructure as Code)
+# Les valeurs secrètes (sync: false) sont saisies dans le tableau de bord Render, jamais dans le dépôt.
+services:
+  - type: web
+    name: vite-et-gourmand
+    runtime: docker
+    plan: free
+    region: frankfurt          # serveur dans l'Union européenne (RGPD)
+    branch: main               # seule la branche principale est déployée
+    healthCheckPath: /
+    envVars:
+      - key: APP_ENV
+        value: prod
+      - key: TRUST_PROXY
+        value: "1"
+      - key: APP_URL
+        sync: false
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        sync: false
+      - key: DB_NAME
+        value: vite_gourmand
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_CA_CERT
+        sync: false
+      - key: MONGO_URI
+        sync: false
+      - key: MONGO_DB
+        value: vite_gourmand
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: MAIL_FROM
+        sync: false
+      - key: MAIL_FROM_NAME
+        value: Vite & Gourmand
+      - key: MAIL_ENTREPRISE
+        sync: false
