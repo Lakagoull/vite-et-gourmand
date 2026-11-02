@@ -13,8 +13,10 @@ if (PHP_SAPI === 'cli-server' && is_file(__DIR__ . parse_url($_SERVER['REQUEST_U
 require dirname(__DIR__) . '/src/bootstrap.php';
 
 use App\Controllers\AuthController;
+use App\Controllers\CommandeController;
 use App\Controllers\ContactController;
 use App\Controllers\EspaceController;
+use App\Controllers\GestionController;
 use App\Controllers\MenuController;
 use App\Controllers\PageController;
 use App\Router;
@@ -44,9 +46,24 @@ $router->get('/reinitialiser-mot-de-passe', [AuthController::class, 'reinitialis
 $router->post('/reinitialiser-mot-de-passe', [AuthController::class, 'reinitialiser']);
 
 // Espaces réservés
+// Commande
+$router->get('/commande', [CommandeController::class, 'formulaire']);
+$router->post('/commande', [CommandeController::class, 'valider']);
+$router->get('/api/devis', [CommandeController::class, 'devis']);
+
+// Espace utilisateur
 $router->get('/espace', [EspaceController::class, 'utilisateur']);
-$router->get('/employe', [EspaceController::class, 'employe']);
-$router->get('/admin', [EspaceController::class, 'admin']);
+$router->get('/espace/commande', [EspaceController::class, 'commande']);
+$router->get('/espace/commande/modifier', [EspaceController::class, 'modifierForm']);
+$router->post('/espace/commande/modifier', [EspaceController::class, 'modifier']);
+$router->post('/espace/commande/annuler', [EspaceController::class, 'annuler']);
+$router->post('/espace/avis', [EspaceController::class, 'avis']);
+$router->get('/espace/profil', [EspaceController::class, 'profilForm']);
+$router->post('/espace/profil', [EspaceController::class, 'profil']);
+
+// Espaces employé et administrateur
+$router->get('/employe', [GestionController::class, 'employe']);
+$router->get('/admin', [GestionController::class, 'admin']);
 
 try {
     $router->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);

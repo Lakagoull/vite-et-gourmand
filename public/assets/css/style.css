@@ -185,3 +185,40 @@ main:focus { outline: none; }
 .regles-mdp li.ok::before { content: "✓"; color: var(--sauge); }
 .form-check-input { width: 1.25em; height: 1.25em; border: 2px solid #A99887; }
 .form-check-input:checked { background-color: var(--bordeaux); border-color: var(--bordeaux); }
+
+/* ----- Commande ----- */
+.num-etape { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: var(--bordeaux); color: #fff; font-family: var(--police-texte); font-size: 1rem; margin-right: .4rem; vertical-align: middle; }
+.infos-client dt { color: var(--gris); font-weight: 400; }
+.colle { position: sticky; top: 1.5rem; }
+.recap-prix dl { margin: 0; }
+.ligne-prix { display: flex; justify-content: space-between; gap: 1rem; padding: .55rem 0; border-bottom: 1px dashed var(--bordure); }
+.ligne-prix dt { font-weight: 400; }
+.ligne-prix dd { margin: 0; font-weight: 700; white-space: nowrap; }
+.ligne-prix.remise dd, .ligne-prix.remise dt { color: var(--sauge); }
+.ligne-prix.total { border-bottom: 0; border-top: 2px solid var(--or); margin-top: .3rem; padding-top: .8rem; }
+.ligne-prix.total dt, .ligne-prix.total dd { font-family: var(--police-titre); font-size: 1.45rem; color: var(--bordeaux); font-weight: 700; }
+.champ-court { max-width: 340px; }
+
+/* ----- Espace client ----- */
+.onglets-espace .nav-link { color: var(--bordeaux); font-weight: 700; border: 2px solid var(--bordeaux); border-radius: 8px; }
+.onglets-espace .nav-link.active { background: var(--bordeaux); color: #fff; }
+.table-vg { --bs-table-bg: #fff; }
+.table-vg th, .table-vg td { padding: .9rem 1rem; vertical-align: middle; }
+.table-vg thead th { background: var(--creme); font-size: .85rem; text-transform: uppercase; letter-spacing: .04em; color: var(--gris); }
+.statut { display: inline-block; font-size: .8rem; font-weight: 700; padding: .25rem .7rem; border-radius: 20px; border: 1px solid transparent; }
+.statut-grand { font-size: 1rem; padding: .4rem 1rem; }
+.statut-en_attente { background: #FFF6E5; color: #6E4E14; border-color: #EBD6A8; }
+.statut-accepte, .statut-en_preparation, .statut-en_cours_livraison { background: #EEF2FA; color: #2D4A7A; border-color: #C8D3EA; }
+.statut-livre, .statut-terminee { background: #F1F5EE; color: var(--sauge); border-color: #C9D6C3; }
+.statut-attente_retour_materiel { background: #FDF1EF; color: var(--alerte); border-color: #F2C6BF; }
+.statut-annulee { background: #EFEDEB; color: #5A504A; border-color: #D6CFC8; }
+.suivi { list-style: none; padding: 0; margin: 0; border-left: 3px solid var(--or); }
+.suivi li { position: relative; padding: 0 0 1rem 1.25rem; }
+.suivi li::before { content: ""; position: absolute; left: -9px; top: .35rem; width: 15px; height: 15px; border-radius: 50%; background: var(--bordeaux); border: 3px solid #fff; }
+.suivi li:last-child { padding-bottom: 0; }
+.suivi strong, .suivi time { display: block; }
+.suivi time { color: var(--gris); font-size: .9rem; }
+.choix-note { display: flex; gap: .5rem; flex-wrap: wrap; }
+.btn-check:checked + .btn-secondaire { background: var(--bordeaux); color: #fff; }
+.btn-danger-vg { background: #fff; border-color: var(--alerte); color: var(--alerte); }
+.btn-danger-vg:hover, .btn-danger-vg:focus-visible { background: var(--alerte); color: #fff; }

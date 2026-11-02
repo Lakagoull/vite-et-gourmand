@@ -60,6 +60,18 @@ final class Utilisateur
         return (int) $pdo->lastInsertId();
     }
 
+    public static function mettreAJourProfil(int $id, array $d): void
+    {
+        Database::get()->prepare(
+            "UPDATE utilisateur SET nom = :nom, prenom = :prenom, telephone = :telephone, email = :email,
+                adresse_postale = :adresse, ville = :ville
+             WHERE utilisateur_id = :id"
+        )->execute([
+            "nom" => $d["nom"], "prenom" => $d["prenom"], "telephone" => $d["telephone"],
+            "email" => mb_strtolower($d["email"]), "adresse" => $d["adresse_postale"], "ville" => $d["ville"], "id" => $id,
+        ]);
+    }
+
     public static function changerMotDePasse(int $id, string $motDePasse): void
     {
         $stmt = Database::get()->prepare('UPDATE utilisateur SET password = :password WHERE utilisateur_id = :id');
