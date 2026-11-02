@@ -222,3 +222,15 @@ main:focus { outline: none; }
 .btn-check:checked + .btn-secondaire { background: var(--bordeaux); color: #fff; }
 .btn-danger-vg { background: #fff; border-color: var(--alerte); color: var(--alerte); }
 .btn-danger-vg:hover, .btn-danger-vg:focus-visible { background: var(--alerte); color: #fff; }
+
+/* ----- Espace de gestion (employé / administrateur) ----- */
+.tuile { display: flex; flex-direction: column; text-decoration: none; color: var(--encre); height: 100%; }
+.tuile:hover { border-color: var(--bordeaux); color: var(--encre); }
+.tuile-chiffre { font-family: var(--police-titre); font-size: 2.4rem; font-weight: 700; color: var(--bordeaux); line-height: 1.1; }
+.galerie-gestion { list-style: none; padding: 0; margin: 0 0 1rem; display: flex; flex-wrap: wrap; gap: 1rem; }
+.galerie-gestion img { display: block; width: 180px; height: 120px; object-fit: cover; border-radius: 8px; }
+.miniature { object-fit: cover; border-radius: 6px; }
+.grille-allergenes { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: .4rem 1rem; }
+.ligne-erreur th, .ligne-erreur td { background: #FDF1EF !important; }
+.nav-tabs .nav-link { color: var(--bordeaux); font-weight: 700; }
+.nav-tabs .nav-link.active { color: var(--encre); }
