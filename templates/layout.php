@@ -23,6 +23,7 @@
     <?php partial('footer'); ?>
 
     <script src="/assets/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/app.js"></script>
     <?php foreach ($scripts ?? [] as $script): ?>
         <script src="/assets/js/<?= e($script) ?>.js"></script>
     <?php endforeach; ?>

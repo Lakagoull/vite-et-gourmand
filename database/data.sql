@@ -58,37 +58,37 @@ INSERT INTO allergene (allergene_id, libelle) VALUES
 (14, 'Mollusques');
 
 -- Menus
-INSERT INTO menu (menu_id, titre, description, nombre_personne_minimum, prix_par_personne, conditions, quantite_restante, theme_id, regime_id) VALUES
+INSERT INTO menu (menu_id, titre, description, nombre_personne_minimum, prix_par_personne, conditions, delai_commande_jours, quantite_restante, theme_id, regime_id) VALUES
 (1, 'Menu de Noël Tradition',
     'Un repas de fête généreux autour du foie gras, de la volaille fermière et de la traditionnelle bûche.',
     6, 42.00,
     'À commander au minimum 14 jours avant la prestation. Les plats sont livrés froids : à conserver au réfrigérateur (entre 0 et 4 °C) et à consommer sous 48 h.',
-    8, 1, 1),
+    14, 8, 1, 1),
 (2, 'Menu de Pâques Printanier',
     'L''agneau de lait à l''honneur, accompagné de légumes primeurs et d''un dessert chocolaté.',
     4, 36.00,
     'À commander au minimum 7 jours avant la prestation. Conserver au frais (entre 0 et 4 °C).',
-    10, 2, 1),
+    7, 10, 2, 1),
 (3, 'Menu Classique Bordelais',
     'Les saveurs du Sud-Ouest : entrecôte à la bordelaise, gratin et cannelés maison.',
     2, 29.00,
     'À commander au minimum 3 jours avant la prestation. Conserver au frais et réchauffer avant dégustation.',
-    15, 3, 1),
+    3, 15, 3, 1),
 (4, 'Menu Végétarien du Marché',
     'Une cuisine de saison, colorée et sans viande ni poisson, idéale pour tous les convives.',
     4, 27.00,
     'À commander au minimum 5 jours avant la prestation. Conserver au frais (entre 0 et 4 °C).',
-    12, 3, 2),
+    5, 12, 3, 2),
 (5, 'Menu Vegan Fraîcheur',
     'Un menu 100 % végétal, sans produit d''origine animale, frais et gourmand.',
     4, 28.00,
     'À commander au minimum 5 jours avant la prestation. Conserver au frais et consommer sous 24 h.',
-    5, 3, 3),
+    5, 5, 3, 3),
 (6, 'Menu Réception & Évènement',
     'Pour vos mariages, anniversaires et séminaires : un menu raffiné pensé pour les grandes tablées. Vaisselle et matériel de service prêtés.',
     20, 48.00,
     'À commander au minimum 1 mois avant la prestation. Le matériel prêté doit être restitué sous 10 jours ouvrés, sinon 600 € de frais seront facturés (voir CGV).',
-    3, 4, 1);
+    30, 3, 4, 1);
 
 -- Galerie d'images
 INSERT INTO menu_image (menu_id, chemin, texte_alternatif, ordre) VALUES

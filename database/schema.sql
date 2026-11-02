@@ -105,6 +105,7 @@ CREATE TABLE menu (
     nombre_personne_minimum  INT            NOT NULL,
     prix_par_personne        DECIMAL(8,2)   NOT NULL,
     conditions               TEXT           NULL,
+    delai_commande_jours     INT            NOT NULL DEFAULT 0,  -- délai minimum avant la prestation (jours)
     quantite_restante        INT            NOT NULL DEFAULT 0,
     theme_id                 INT            NOT NULL,
     regime_id                INT            NOT NULL,
@@ -113,7 +114,8 @@ CREATE TABLE menu (
     CONSTRAINT fk_menu_regime FOREIGN KEY (regime_id) REFERENCES regime (regime_id),
     CONSTRAINT ck_menu_nb_personne CHECK (nombre_personne_minimum >= 1),
     CONSTRAINT ck_menu_prix        CHECK (prix_par_personne >= 0),
-    CONSTRAINT ck_menu_stock       CHECK (quantite_restante >= 0)
+    CONSTRAINT ck_menu_stock       CHECK (quantite_restante >= 0),
+    CONSTRAINT ck_menu_delai       CHECK (delai_commande_jours >= 0)
 ) ENGINE=InnoDB;
 
 -- Galerie d'images d'un menu (on stocke le chemin du fichier)
