@@ -60,6 +60,31 @@ final class Utilisateur
         return (int) $pdo->lastInsertId();
     }
 
+    /** Comptes employés (pour l'espace administrateur). */
+    public static function employes(): array
+    {
+        return Database::get()->query(
+            "SELECT u.utilisateur_id, u.email, u.nom, u.prenom, u.actif, u.date_creation
+             FROM utilisateur u JOIN role r ON r.role_id = u.role_id
+             WHERE r.libelle = 'employe'
+             ORDER BY u.actif DESC, u.date_creation DESC"
+        )->fetchAll();
+    }
+
+    /**
+     * Active ou désactive un compte. Limité aux comptes "employe" :
+     * l'administrateur ne peut pas désactiver son propre compte ni un client par ce biais.
+     */
+    public static function changerActif(int $id, bool $actif): bool
+    {
+        $stmt = Database::get()->prepare(
+            "UPDATE utilisateur SET actif = :actif
+             WHERE utilisateur_id = :id AND role_id = (SELECT role_id FROM role WHERE libelle = 'employe')"
+        );
+        $stmt->execute(['actif' => $actif ? 1 : 0, 'id' => $id]);
+        return $stmt->rowCount() > 0;
+    }
+
     public static function mettreAJourProfil(int $id, array $d): void
     {
         Database::get()->prepare(
