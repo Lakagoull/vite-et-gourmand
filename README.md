@@ -30,8 +30,9 @@ cp .env.example .env
 mysql -u root -p < database/schema.sql
 mysql -u root -p < database/data.sql
 
-# 5. Initialiser la base NoSQL
+# 5. Initialiser la base NoSQL puis y copier les commandes (statistiques)
 mongosh "mongodb://127.0.0.1:27017" database/mongo-init.js
+php database/sync-mongo.php
 
 # 6. Lancer le serveur de développement
 php -S localhost:8000 -t public public/index.php
