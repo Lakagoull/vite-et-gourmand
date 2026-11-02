@@ -20,7 +20,8 @@
                     </li>
                     <?php if ($utilisateur): ?>
                         <li class="nav-item">
-                            <a class="nav-link<?= estActif('/espace') ? ' active' : '' ?>" href="/espace">Mon espace</a>
+                            <?php $lienEspace = \App\Services\Auth::accueilEspace(); ?>
+                            <a class="nav-link<?= estActif($lienEspace) ? ' active' : '' ?>" href="<?= e($lienEspace) ?>"<?= estActif($lienEspace) ? ' aria-current="page"' : '' ?>>Mon espace</a>
                         </li>
                         <li class="nav-item">
                             <form method="post" action="/deconnexion" class="d-inline">

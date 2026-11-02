@@ -58,6 +58,19 @@ CREATE TABLE reinitialisation_mdp (
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
+-- Tentatives de connexion échouées (protection contre la force brute)
+-- ---------------------------------------------------------------------
+CREATE TABLE tentative_connexion (
+    tentative_id    INT          NOT NULL AUTO_INCREMENT,
+    email           VARCHAR(180) NOT NULL,
+    adresse_ip      VARCHAR(45)  NOT NULL,
+    date_tentative  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (tentative_id),
+    KEY idx_tentative_email (email, date_tentative),
+    KEY idx_tentative_ip (adresse_ip, date_tentative)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
 -- Référentiels du menu
 -- ---------------------------------------------------------------------
 CREATE TABLE theme (
