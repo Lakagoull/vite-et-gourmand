@@ -1,0 +1,8 @@
+.git
+.env
+vendor
+storage/mails/*
+public/assets/images/uploads/*
+docs
+*.log
+.vscode

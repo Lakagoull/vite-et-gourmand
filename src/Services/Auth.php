@@ -24,7 +24,7 @@ final class Auth
     public static function tenterConnexion(string $email, string $motDePasse): array|string
     {
         $email = mb_strtolower(trim($email));
-        $ip = $_SERVER['REMOTE_ADDR'] ?? 'inconnue';
+        $ip = ipClient();
 
         if (self::estBloque($email, $ip)) {
             return 'Trop de tentatives de connexion. Merci de réessayer dans ' . self::FENETRE_MINUTES . ' minutes.';

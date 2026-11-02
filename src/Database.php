@@ -23,11 +23,18 @@ final class Database
                 env('DB_PORT', '3306'),
                 env('DB_NAME', 'vite_gourmand')
             );
-            self::$pdo = new PDO($dsn, env('DB_USER', 'root'), env('DB_PASSWORD', ''), [
+            $options = [
                 PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                 PDO::ATTR_EMULATE_PREPARES   => false, // vraies requêtes préparées côté serveur
-            ]);
+            ];
+            // En production : connexion chiffrée (TLS) avec vérification du certificat du serveur
+            $ca = env('DB_SSL_CA', '');
+            if ($ca !== '' && is_file($ca)) {
+                $options[PDO::MYSQL_ATTR_SSL_CA] = $ca;
+                $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = true;
+            }
+            self::$pdo = new PDO($dsn, env('DB_USER', 'root'), env('DB_PASSWORD', ''), $options);
         }
         return self::$pdo;
     }

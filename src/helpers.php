@@ -132,3 +132,19 @@ function msgErreur(array $erreurs, string $champ): string
         ? '<div id="erreur-' . e($champ) . '" class="invalid-feedback d-block">' . e($erreurs[$champ]) . '</div>'
         : '';
 }
+
+/**
+ * Adresse IP du visiteur. Derrière le proxy de l'hébergeur (TRUST_PROXY=1), l'IP réelle
+ * est transmise dans l'en-tête X-Forwarded-For. Cet en-tête peut être falsifié par un client :
+ * il ne sert qu'au limiteur de tentatives par IP, la limite par e-mail restant la protection principale.
+ */
+function ipClient(): string
+{
+    if (env('TRUST_PROXY') === '1' && !empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $ip = trim(explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0]);
+        if (filter_var($ip, FILTER_VALIDATE_IP)) {
+            return $ip;
+        }
+    }
+    return $_SERVER['REMOTE_ADDR'] ?? 'inconnue';
+}
